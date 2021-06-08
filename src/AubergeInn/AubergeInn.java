@@ -1,6 +1,6 @@
 // Travail fait par :
-//   NomEquipier1 - Matricule
-//   NomEquipier2 - Matricule
+//   Pierre-Daniel Godfrey - 17179777
+//   Rémi Létourneau - 19112826
 
 package AubergeInn;
 
