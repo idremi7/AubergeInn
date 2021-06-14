@@ -4,10 +4,7 @@
 
 package AubergeInn;
 
-import AubergeInn.tables.TableChambres;
-import AubergeInn.tables.TableClients;
-import AubergeInn.tables.TableCommodites;
-import AubergeInn.tables.TableReserveChambre;
+import AubergeInn.tables.*;
 import AubergeInn.transactions.GestionChambre;
 import AubergeInn.transactions.GestionClient;
 import AubergeInn.transactions.GestionCommodite;
@@ -54,10 +51,11 @@ public class AubergeInn
     private static TableClients client;
     private static TableChambres chambre;
     private static TableCommodites commodite;
+    private static TablePossedeCommodite commoditeChambre;
     private static TableReserveChambre reservation;
     private static GestionClient gestionClient;
     private static GestionChambre gestionChambre;
-    private GestionCommodite gestionCommodite;
+    private static GestionCommodite gestionCommodite;
     private GestionReservation gestionReservation;
 
     /**
@@ -83,9 +81,12 @@ public class AubergeInn
             client = new TableClients(cx);
             chambre = new TableChambres(cx);
             commodite = new TableCommodites(cx);
+            commoditeChambre = new TablePossedeCommodite(cx);
             reservation = new TableReserveChambre(cx);
+
             gestionClient = new GestionClient(client, reservation);
-            gestionChambre = new GestionChambre();
+            gestionChambre = new GestionChambre(chambre);
+            gestionCommodite = new GestionCommodite(commodite, commoditeChambre);
 
             BufferedReader reader = ouvrirFichier(args);
 
@@ -158,7 +159,6 @@ public class AubergeInn
                     int idclient = readInt(tokenizer);
                     //appel methode traitement pour la transaction
                     gestionClient.supprimerClient(idclient);
-
                 }
                 // **********************
                 // ajouter une chambre
@@ -169,9 +169,9 @@ public class AubergeInn
                     int idChambre = readInt(tokenizer);
                     String nom = readString(tokenizer);
                     String type = readString(tokenizer);
-                    float prix = readInt(tokenizer);
+                    float prix = Float.parseFloat(readString(tokenizer));
                     //appel methode traitement pour la transaction
-                    //gestionChambre.ajouterChambre(idChambre, nom, type, prix);
+                    gestionChambre.ajouterChambre(idChambre, nom, type, prix);
                 }
                 // ***********************
                 // supprimer une chambre
@@ -181,16 +181,31 @@ public class AubergeInn
                     // Lecture des parametres
                     int idChambre = readInt(tokenizer);
                     //appel methode traitement pour la transaction
-                    //gestionChambre.supprimerChambre(idChambre);
+                    gestionChambre.supprimerChambre(idChambre);
                 }
                 // ***********************
-                // Command 1
+                // ajouterCommodite : Cette commande ajoute un nouveau service offert par l’entreprise.
                 // ***********************
-                else if (command.equals("Command1"))
+                else if (command.equals("ajouterCommodite"))
                 {
                     // Lecture des parametres
-                    int id = readInt(tokenizer);
+                    int idCommodite = readInt(tokenizer);
+                    String description = readString(tokenizer);
+                    float prix =  Float.parseFloat(readString(tokenizer));
+
                     //appel methode traitement pour la transaction
+                    gestionCommodite.ajouterCommodite(idCommodite, description, prix);
+                }
+                // ***********************
+                // inclureCommodite : Cette commande ajoute une commodité à une chambre.
+                // ***********************
+                else if (command.equals("inclureCommodite"))
+                {
+                    // Lecture des parametres
+                    int idChambre = readInt(tokenizer);
+                    int idCommodite = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
+                    gestionCommodite.InclureCommodite(idChambre, idCommodite);
                 }
                 else
                 {

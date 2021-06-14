@@ -8,6 +8,8 @@ import AubergeInn.tuples.TupleClient;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableChambres
 {
@@ -18,6 +20,7 @@ public class TableChambres
 
     private final PreparedStatement stmtChambreReserve;
     private final PreparedStatement stmtChambresLibre;
+    private final PreparedStatement stmtChambresCommodites;
 
     private final Connexion cx;
 
@@ -40,6 +43,11 @@ public class TableChambres
             .prepareStatement("select * "
                     + "from reservechambre "
                     + "where idchambre = ? ");
+
+        this.stmtChambresCommodites =  cx.getConnection()
+                .prepareStatement("select t3.idcommodite, t3.description, t3.prix"
+                        + " from chambre t1 ,possedecommodite t2, commodite t3 "
+                        + "where t1.idchambre = ? and t2.idcommodite = t3.idcommodite ");
     }
 
     /**
@@ -87,7 +95,7 @@ public class TableChambres
     /**
      * Ajout d'une nouvelle chambre dans la base de données.
      */
-    public void ajouterChambre(int idChambre, String nom, String type, float prixBase) throws SQLException
+    public void ajouter(int idChambre, String nom, String type, float prixBase) throws SQLException
     {
         /* Ajout d'une chambre. */
         stmtInsert.setInt(1, idChambre);
@@ -100,10 +108,30 @@ public class TableChambres
     /**
      * Suppression  d'une chambre.
      */
-    public void supprimerChambre(int idChambre) throws SQLException
+    public int supprimer(int idChambre) throws SQLException
     {
         /* Suppression d'une chambre. */
         stmtDelete.setInt(1, idChambre);
-        stmtDelete.executeUpdate();
+        return stmtDelete.executeUpdate();
+    }
+
+    /**
+     * Trouve toutes les commodites d'une chambre
+     */
+    public List<TupleCommodite> ListerCommodites(int idChambre) throws SQLException
+    {
+        stmtChambresCommodites.setInt(1, idChambre);
+        ResultSet rset = stmtChambresCommodites.executeQuery();
+        List<TupleCommodite> listCommodite = new ArrayList<>();
+        while (rset.next())
+        {
+            TupleCommodite commodite = new TupleCommodite(rset.getInt(1),     //id
+                                                          rset.getString(2),  //description
+                                                          rset.getFloat(3));  //prix
+
+            listCommodite.add(commodite);
+        }
+        rset.close();
+        return listCommodite;
     }
 }

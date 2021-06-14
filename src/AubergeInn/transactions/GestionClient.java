@@ -40,7 +40,7 @@ public class GestionClient
                 throw new IFT287Exception("Livre existe déjà: " + idClient);
 
             // Ajout du livre dans la table des livres
-            client.ajouterClient(idClient, nom, prenom, age);
+            client.ajouter(idClient, nom, prenom, age);
 
             // Commit
             cx.commit();

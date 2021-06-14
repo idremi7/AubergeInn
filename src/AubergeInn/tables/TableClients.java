@@ -77,7 +77,7 @@ public class TableClients
     /**
      * Ajout d'un nouveau Client dans la base de données.
      */
-    public void ajouterClient(int idClient, String nom, String prenom, int age) throws SQLException
+    public void ajouter(int idClient, String nom, String prenom, int age) throws SQLException
     {
         /* Ajout d'un client-canard. */
         stmtInsert.setInt(1, idClient);
