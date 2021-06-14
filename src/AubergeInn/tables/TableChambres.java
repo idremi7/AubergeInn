@@ -3,7 +3,8 @@ package AubergeInn.tables;
 
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleChambre;
-import AubergeInn.tuples.TupleClient;
+import AubergeInn.tuples.TupleCommodite;
+import AubergeInn.tuples.TuplePossedeCommodite;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
