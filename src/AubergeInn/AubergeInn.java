@@ -4,6 +4,15 @@
 
 package AubergeInn;
 
+import AubergeInn.tables.TableChambres;
+import AubergeInn.tables.TableClients;
+import AubergeInn.tables.TableCommodites;
+import AubergeInn.tables.TableReserveChambre;
+import AubergeInn.transactions.GestionChambre;
+import AubergeInn.transactions.GestionClient;
+import AubergeInn.transactions.GestionCommodite;
+import AubergeInn.transactions.GestionReservation;
+
 import java.io.*;
 import java.util.StringTokenizer;
 import java.sql.*;
@@ -40,7 +49,16 @@ import java.sql.*;
  */
 public class AubergeInn
 {
+    private GestionAubergeInn gestionAubergeInn;
     private static Connexion cx;
+    private static TableClients client;
+    private static TableChambres chambre;
+    private static TableCommodites commodite;
+    private static TableReserveChambre reservation;
+    private static GestionClient gestionClient;
+    private static GestionChambre gestionChambre;
+    private GestionCommodite gestionCommodite;
+    private GestionReservation gestionReservation;
 
     /**
      * @param args
@@ -52,15 +70,25 @@ public class AubergeInn
             System.out.println("Usage: java AubergeInn.AubergeInn <serveur> <bd> <user> <password> [<fichier-transactions>]");
             return;
         }
-        
-        cx = null;
-        
+
+        //AubergeInn aubergeInnInstance = null;
+        Connexion cx = null;
+
         try
         {
             // Il est possible que vous ayez à déplacer la connexion ailleurs.
             // N'hésitez pas à le faire!
+            //aubergeInnInstance = new AubergeInn(args[0], args[1], args[2], args[3]);
             cx = new Connexion(args[0], args[1], args[2], args[3]);
+            client = new TableClients(cx);
+            chambre = new TableChambres(cx);
+            commodite = new TableCommodites(cx);
+            reservation = new TableReserveChambre(cx);
+            gestionClient = new GestionClient(client, reservation);
+            gestionChambre = new GestionChambre();
+
             BufferedReader reader = ouvrirFichier(args);
+
             String transaction = lireTransaction(reader);
             while (!finTransaction(transaction))
             {
@@ -73,6 +101,17 @@ public class AubergeInn
             if (cx != null)
                 cx.fermer();
         }
+
+    }
+
+    public AubergeInn(String serveur, String bd, String user, String password) throws Exception
+    {
+
+    }
+
+    public void fermer() throws Exception
+    {
+        cx.fermer();
     }
 
     /**
@@ -88,26 +127,74 @@ public class AubergeInn
             if (tokenizer.hasMoreTokens())
             {
                 String command = tokenizer.nextToken();
-                // Vous devez remplacer la chaine "commande1" et "commande2" par
-                // les commandes de votre programme. Vous pouvez ajouter autant
-                // de else if que necessaire. Vous n'avez pas a traiter la
-                // commande "quitter".
-                if (command.equals("commande1"))
+
+                // *******************
+                // HELP
+                // *******************
+                if (command.equals("aide"))
+                {
+                    afficherAide();
+                }
+                // *******************
+                // ajouter un client
+                // *******************
+                else if (command.equals("ajouterClient"))
                 {
                     // Lecture des parametres
-                    String param1 = readString(tokenizer);
-                    Date param2 = readDate(tokenizer);
-                    int param3 = readInt(tokenizer);
+                    int idclient = readInt(tokenizer);
+                    String nom = readString(tokenizer);
+                    String prenom = readString(tokenizer);
+                    int age = readInt(tokenizer);
                     // Appel de la methode des gestionnaires qui traite la transaction specifique
+                    gestionClient.ajouterClient(idclient, nom, prenom, age);
+
                 }
-                else if (command.equals("commande2"))
+                // *******************
+                // supprimer un client
+                // *******************
+                else if (command.equals("supprimerClient"))
                 {
-                    // Lire les parametres ici et appeler la bonne methode
-                    // de traitement pour la transaction
+                    // Lecture des parametres
+                    int idclient = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
+                    gestionClient.supprimerClient(idclient);
+
+                }
+                // **********************
+                // ajouter une chambre
+                // ***********************
+                else if (command.equals("ajouterChambre"))
+                {
+                    // Lecture des parametres
+                    int idChambre = readInt(tokenizer);
+                    String nom = readString(tokenizer);
+                    String type = readString(tokenizer);
+                    float prix = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
+                    //gestionChambre.ajouterChambre(idChambre, nom, type, prix);
+                }
+                // ***********************
+                // supprimer une chambre
+                // ***********************
+                else if (command.equals("supprimerChambre"))
+                {
+                    // Lecture des parametres
+                    int idChambre = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
+                    //gestionChambre.supprimerChambre(idChambre);
+                }
+                // ***********************
+                // Command 1
+                // ***********************
+                else if (command.equals("Command1"))
+                {
+                    // Lecture des parametres
+                    int id = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
                 }
                 else
                 {
-                    System.out.println(" : Transaction non reconnue");
+                    System.out.println(" : Transaction non reconnue. Essayer \"aide\"");
                 }
             }
         }
@@ -121,6 +208,29 @@ public class AubergeInn
         }
     }
 
+    /** Affiche le menu des transactions acceptées par le système */
+    private static void afficherAide()
+    {
+        System.out.println();
+        System.out.println("Chaque transaction comporte un nom et une liste d'arguments");
+        System.out.println("separes par des espaces. La liste peut etre vide.");
+        System.out.println(" Les dates sont en format yyyy-mm-dd.");
+        System.out.println("");
+        System.out.println("Les transactions sont:");
+        System.out.println("  aide");
+        System.out.println("  quitter");
+        System.out.println("  ajouterClient <idClient> <nom> <prenom> <age>");
+        System.out.println("  supprimerClient <idClient>");
+        System.out.println("  ajouterChambre <idChambre> <nom de la chambre> <type de lit> <prix de base>");
+        System.out.println("  supprimerChambre <idChambre>");
+        System.out.println("  ajouterCommodite <idCommodite> <description> <surplus prix>");
+        System.out.println("  inclureCommodite <idChambre> <idCommodite>");
+        System.out.println("  enleverCommodite <idChambre> <idCommodite>");
+        System.out.println("  afficherChambresLibres");
+        System.out.println("  afficherClient <idClient>");
+        System.out.println("  afficherChambre <idChambre>");
+        System.out.println("  reserver <idClient> <idChambre> <dateDebut> <dateFin>");
+    }
     
     // ****************************************************************
     // *   Les methodes suivantes n'ont pas besoin d'etre modifiees   *
