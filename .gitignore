@@ -1,5 +1,7 @@
 /AubergeInn.iml
 /.idea/
-/out/production/AubergeInn/AubergeInn/AubergeInn.class
-/out/production/AubergeInn/AubergeInn/Connexion.class
-/out/production/AubergeInn/AubergeInn/IFT287Exception.class
+/out/production/AubergeInn/AubergeInn/transactions/*.class
+/out/production/AubergeInn/AubergeInn/tuples/*.class
+/out/production/AubergeInn/AubergeInn/tables/*.class
+/out/production/AubergeInn/AubergeInn/*.class
+
