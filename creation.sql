@@ -2,7 +2,8 @@ CREATE TABLE Client
 (
     idClient SERIAL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
-    prenom VARCHAR(255) NOT NULL
+    prenom VARCHAR(255) NOT NULL,
+    age INTEGER NOT NULL
 );
 
 CREATE TABLE Chambre
