@@ -6,6 +6,7 @@ package AubergeInn;
 
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleClient;
+import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TupleReserveChambre;
 
 import java.io.*;
@@ -245,7 +246,18 @@ public class AubergeInn
                     // Lecture des parametres
                     int idChambre = readInt(tokenizer);
                     //appel methode traitement pour la transaction
+                    TupleChambre chambre = gestionAubergeInn.getGestionChambre().getChambre(idChambre);
 
+                    System.out.print("\nChambre:");
+                    System.out.println("\nidChambre Nom Type PrixBase");
+                    System.out.println(chambre.getIdChambre() + " " + chambre.getNom() + " " + chambre.getType() + " " + chambre.getPrixBase());
+
+                    List<TupleCommodite> commodites = gestionAubergeInn.getGestionChambre().ListerCommodites(idChambre);
+                    System.out.print("\nCommoditées:");
+                    System.out.println("\nid description prix");
+                    for(TupleCommodite commodite : commodites){
+                        System.out.println(commodite.getIdCommodite() + " " + commodite.getDescription() + " " + commodite.getPrix());
+                    }
                 }
                 // ***********************
                 // reserver : Cette commande réserve une chambre pour un client.

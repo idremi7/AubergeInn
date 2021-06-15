@@ -61,9 +61,11 @@ public class TableChambres
 
 
         this.stmtChambresCommodites =  cx.getConnection()
-                .prepareStatement("select t3.idcommodite, t3.description, t3.prix"
-                        + " from chambre t1 ,possedecommodite t2, commodite t3 "
-                        + "where t1.idchambre = ? and t2.idcommodite = t3.idcommodite ");
+                .prepareStatement("select c.*\n" +
+                        "from chambre t1\n" +
+                        "JOIN possedecommodite p on t1.idchambre = p.idchambre\n" +
+                        "JOIN commodite c on c.idcommodite = p.idcommodite\n" +
+                        "WHERE t1.idchambre = ?;");
     }
 
     /**
@@ -146,7 +148,7 @@ public class TableChambres
     /**
      * Trouve toutes les commodites d'une chambre
      */
-    public List<TupleCommodite> ListerCommodites(int idChambre) throws SQLException
+    public List<TupleCommodite> listerCommodites(int idChambre) throws SQLException
     {
         stmtChambresCommodites.setInt(1, idChambre);
         ResultSet rset = stmtChambresCommodites.executeQuery();

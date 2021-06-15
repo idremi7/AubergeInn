@@ -96,6 +96,21 @@ public class GestionChambre
 
     }
 
+    public List<TupleCommodite> ListerCommodites(int idChambre) throws SQLException
+    {
+        try
+        {
+            List<TupleCommodite> commodites = chambre.listerCommodites(idChambre);
+            cx.commit();
+            return commodites;
+        }
+        catch (Exception e)
+        {
+            cx.rollback();
+            throw e;
+        }
+    }
+
     public List<TupleChambre> ListerChambresLibres() throws SQLException
     {
         try
