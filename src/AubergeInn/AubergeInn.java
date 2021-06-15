@@ -4,15 +4,14 @@
 
 package AubergeInn;
 
-import AubergeInn.tables.*;
-import AubergeInn.transactions.GestionChambre;
-import AubergeInn.transactions.GestionClient;
-import AubergeInn.transactions.GestionCommodite;
-import AubergeInn.transactions.GestionReservation;
+import AubergeInn.tuples.TupleChambre;
+import AubergeInn.tuples.TupleClient;
+import AubergeInn.tuples.TupleReserveChambre;
 
 import java.io.*;
+import java.sql.Date;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.sql.*;
 
 /**
  * Fichier de base pour le TP2 du cours IFT287
@@ -46,17 +45,7 @@ import java.sql.*;
  */
 public class AubergeInn
 {
-    private GestionAubergeInn gestionAubergeInn;
-    private static Connexion cx;
-    private static TableClients client;
-    private static TableChambres chambre;
-    private static TableCommodites commodite;
-    private static TablePossedeCommodite commoditeChambre;
-    private static TableReserveChambre reservation;
-    private static GestionClient gestionClient;
-    private static GestionChambre gestionChambre;
-    private static GestionCommodite gestionCommodite;
-    private GestionReservation gestionReservation;
+    private static GestionAubergeInn gestionAubergeInn;
 
     /**
      * @param args
@@ -69,24 +58,14 @@ public class AubergeInn
             return;
         }
 
-        //AubergeInn aubergeInnInstance = null;
+        AubergeInn aubergeInnInstance = null;
         Connexion cx = null;
 
         try
         {
             // Il est possible que vous ayez à déplacer la connexion ailleurs.
             // N'hésitez pas à le faire!
-            //aubergeInnInstance = new AubergeInn(args[0], args[1], args[2], args[3]);
-            cx = new Connexion(args[0], args[1], args[2], args[3]);
-            client = new TableClients(cx);
-            chambre = new TableChambres(cx);
-            commodite = new TableCommodites(cx);
-            commoditeChambre = new TablePossedeCommodite(cx);
-            reservation = new TableReserveChambre(cx);
-
-            gestionClient = new GestionClient(client, reservation);
-            gestionChambre = new GestionChambre(chambre);
-            gestionCommodite = new GestionCommodite(commodite, commoditeChambre);
+            aubergeInnInstance = new AubergeInn(args[0], args[1], args[2], args[3]);
 
             BufferedReader reader = ouvrirFichier(args);
 
@@ -99,20 +78,20 @@ public class AubergeInn
         }
         finally
         {
-            if (cx != null)
-                cx.fermer();
+            if (aubergeInnInstance != null)
+                aubergeInnInstance.fermer();
         }
 
     }
 
     public AubergeInn(String serveur, String bd, String user, String password) throws Exception
     {
-
+        gestionAubergeInn = new GestionAubergeInn(serveur, bd, user, password);
     }
 
     public void fermer() throws Exception
     {
-        cx.fermer();
+        gestionAubergeInn.fermer();
     }
 
     /**
@@ -147,7 +126,7 @@ public class AubergeInn
                     String prenom = readString(tokenizer);
                     int age = readInt(tokenizer);
                     // Appel de la methode des gestionnaires qui traite la transaction specifique
-                    gestionClient.ajouterClient(idclient, nom, prenom, age);
+                    gestionAubergeInn.getGestionClient().ajouterClient(idclient, nom, prenom, age);
 
                 }
                 // *******************
@@ -158,7 +137,7 @@ public class AubergeInn
                     // Lecture des parametres
                     int idclient = readInt(tokenizer);
                     //appel methode traitement pour la transaction
-                    gestionClient.supprimerClient(idclient);
+                    gestionAubergeInn.getGestionClient().supprimerClient(idclient);
                 }
                 // **********************
                 // ajouter une chambre
@@ -171,7 +150,7 @@ public class AubergeInn
                     String type = readString(tokenizer);
                     float prix = Float.parseFloat(readString(tokenizer));
                     //appel methode traitement pour la transaction
-                    gestionChambre.ajouterChambre(idChambre, nom, type, prix);
+                    gestionAubergeInn.getGestionChambre().ajouterChambre(idChambre, nom, type, prix);
                 }
                 // ***********************
                 // supprimer une chambre
@@ -181,7 +160,7 @@ public class AubergeInn
                     // Lecture des parametres
                     int idChambre = readInt(tokenizer);
                     //appel methode traitement pour la transaction
-                    gestionChambre.supprimerChambre(idChambre);
+                    gestionAubergeInn.getGestionChambre().supprimerChambre(idChambre);
                 }
                 // ***********************
                 // ajouterCommodite : Cette commande ajoute un nouveau service offert par l’entreprise.
@@ -194,7 +173,7 @@ public class AubergeInn
                     float prix =  Float.parseFloat(readString(tokenizer));
 
                     //appel methode traitement pour la transaction
-                    gestionCommodite.ajouterCommodite(idCommodite, description, prix);
+                    gestionAubergeInn.getGestionCommodite().ajouterCommodite(idCommodite, description, prix);
                 }
                 // ***********************
                 // inclureCommodite : Cette commande ajoute une commodité à une chambre.
@@ -205,7 +184,81 @@ public class AubergeInn
                     int idChambre = readInt(tokenizer);
                     int idCommodite = readInt(tokenizer);
                     //appel methode traitement pour la transaction
-                    gestionCommodite.InclureCommodite(idChambre, idCommodite);
+                    gestionAubergeInn.getGestionCommodite().InclureCommodite(idChambre, idCommodite);
+                }
+                // ***********************
+                // enleverCommodite : Cette commande enlève une commodité d’une chambre.
+                // ***********************
+                else if (command.equals("enleverCommodite"))
+                {
+                    // Lecture des parametres
+                    int idChambre = readInt(tokenizer);
+                    int idCommodite = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
+                    gestionAubergeInn.getGestionCommodite().enleverCommodite(idChambre, idCommodite);
+                }
+                // *******************************************************************************
+                // afficherChambresLibres :
+                // Cette commande affiche toutes les chambres qui sont disponibles. L’affichage
+                // doit inclure le prix de location de la chambre (prix de base + les commodités).
+                // ********************************************************************************
+                else if (command.equals("afficherChambresLibres"))
+                {
+                    //appel methode traitement pour la transaction
+                    List<TupleChambre> listeChambres = gestionAubergeInn.getGestionChambre().ListerChambresLibres();
+                    System.out.println("\nid nom type prixLocation");
+                    for(TupleChambre chambre : listeChambres){
+                        System.out.println(chambre.getIdChambre() + " " + chambre.getNom() + " " + chambre.getType()+ " " + chambre.getPrixBase());
+                    }
+                }
+                // *******************************************************************************
+                // afficherClient :
+                // Cette commande affiche toutes les informations sur un client, incluant
+                // les réservations présentes et passées. Les réservations contiennent le
+                // prix total de la réservation, sans les taxes.
+                // ********************************************************************************
+                else if (command.equals("afficherClient"))
+                {
+                    // Lecture des parametres
+                    int idClient = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
+                    TupleClient client = gestionAubergeInn.getGestionClient().getClient(idClient);
+                    System.out.println("\nClient:");
+                    System.out.println("\nidclient nom prenom age");
+                    System.out.println(client.getIdClient() + " " + client.getNom() + " " + client.getPrenom() + " " + client.getAge());
+
+                    List<TupleReserveChambre> reserveChambres = gestionAubergeInn.getGestionReservation()
+                            .listerToutesReservationClient(idClient);
+                    System.out.println("\nRéservation:");
+                    System.out.println("\nid dateDebut dateFin prixTotal");
+                    for(TupleReserveChambre reserve : reserveChambres){
+                        System.out.println(reserve.getIdReservation() + " " + reserve.getDateDebut() + " " + reserve.getDateFin()+ " " + reserve.getPrixTotal());
+                    }
+                }
+                // *******************************************************************************
+                // afficherChambre :
+                // Cette commande affiche les informations sur une chambre, incluant
+                // les commodités offertes.
+                // ********************************************************************************
+                else if (command.equals("afficherChambre"))
+                {
+                    // Lecture des parametres
+                    int idChambre = readInt(tokenizer);
+                    //appel methode traitement pour la transaction
+
+                }
+                // ***********************
+                // reserver : Cette commande réserve une chambre pour un client.
+                // ***********************
+                else if (command.equals("reserver"))
+                {
+                    // Lecture des parametres
+                    int idClient = readInt(tokenizer);
+                    int idChambre = readInt(tokenizer);
+                    Date dateDebut = readDate(tokenizer);
+                    Date dateFin = readDate(tokenizer);
+                    //appel methode traitement pour la transaction
+                    gestionAubergeInn.getGestionReservation().reserver(idClient, idChambre, dateDebut, dateFin);
                 }
                 else
                 {
@@ -219,7 +272,7 @@ public class AubergeInn
             // Ce rollback est ici seulement pour vous aider et éviter des problèmes lors de la correction
             // automatique. En théorie, il ne sert à rien et ne devrait pas apparaître ici dans un programme
             // fini et fonctionnel sans bogues.
-            cx.rollback();
+            gestionAubergeInn.rollback();
         }
     }
 

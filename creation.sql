@@ -16,11 +16,11 @@ CREATE TABLE Chambre
 
 CREATE TABLE ReserveChambre
 (
+    idReservation SERIAL PRIMARY KEY,
     idClient INTEGER REFERENCES Client(idClient),
     idChambre INTEGER REFERENCES Chambre(idChambre),
     DateDebut DATE NOT NULL,
     DateFin DATE NOT NULL,
-    CONSTRAINT pk_clientChambre PRIMARY KEY(idClient,idChambre),
     CONSTRAINT date CHECK (DateDebut <= DateFin)
 );
 

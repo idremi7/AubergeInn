@@ -5,6 +5,7 @@ import AubergeInn.IFT287Exception;
 import AubergeInn.tables.TableCommodites;
 import AubergeInn.tables.TablePossedeCommodite;
 import AubergeInn.tuples.TupleCommodite;
+import AubergeInn.tuples.TuplePossedeCommodite;
 
 import java.sql.SQLException;
 
@@ -54,7 +55,7 @@ public class GestionCommodite
     }
 
     /**
-     * Supprimer une commodite.
+     * Supprimer une commodite de la bd (pour tester seulement) non necessaire pour le programme.
      */
     public void supprimerCommodite(int idCommodite) throws SQLException, IFT287Exception, Exception
     {
@@ -102,6 +103,33 @@ public class GestionCommodite
             // Commit
             cx.commit();
         } catch (Exception e)
+        {
+            cx.rollback();
+            throw e;
+        }
+    }
+
+    /**
+     * Enlever une commoditer d'une chambre
+     */
+    public void enleverCommodite(int idChambre, int idCommodite) throws SQLException, IFT287Exception, Exception
+    {
+        try
+        {
+            // Validation
+            TuplePossedeCommodite tuplePossedeCommodite = commoditeChambre.getCommoditeChambre(idCommodite, idChambre);
+            if (tuplePossedeCommodite == null)
+                throw new IFT287Exception("Lien inexistant pour la commodite: " + idCommodite + " et la chambre: " + idChambre);
+
+            // Suppression d'une commodite pour une chambre.
+            int nb = commoditeChambre.supprimer(idCommodite, idChambre);
+            if (nb == 0)
+                throw new IFT287Exception("Lien Commodite-Chambre " + idCommodite+"-"+idChambre + " inexistant");
+
+            // Commit
+            cx.commit();
+        }
+        catch (Exception e)
         {
             cx.rollback();
             throw e;

@@ -21,6 +21,7 @@ public class TableChambres
 
     private final PreparedStatement stmtChambreReserve;
     private final PreparedStatement stmtChambresLibre;
+    private final PreparedStatement stmtIsChambreLibre;
     private final PreparedStatement stmtChambresCommodites;
 
     private final Connexion cx;
@@ -41,9 +42,23 @@ public class TableChambres
                       + "where  t1.idclient = t2.idclient and t3.idchambre = t2.idchambre ");
 
         this.stmtChambresLibre = cx.getConnection()
-            .prepareStatement("select * "
-                    + "from reservechambre "
-                    + "where idchambre = ? ");
+            .prepareStatement(
+                    "Select ch.idchambre, ch.nom, ch.type , (ch.prixbase + coalesce(SUM(c.prix),0)) as prixLocation " +
+                    "from chambre ch " +
+                    "LEFT JOIN reservechambre r on ch.idchambre = r.idchambre " +
+                    "LEFT JOIN possedecommodite p on ch.idchambre = p.idchambre " +
+                    "LEFT JOIN commodite c on p.idcommodite = c.idcommodite " +
+                    "where r.idchambre IS NULL OR now() NOT between r.datedebut and r.datefin " +
+                    "GROUP BY ch.idchambre;");
+
+        this.stmtIsChambreLibre = cx.getConnection().prepareStatement("Select ch.idchambre, ch.nom, ch.type , (ch.prixbase + coalesce(SUM(c.prix),0)) as prixLocation\n" +
+                "                    from chambre ch\n" +
+                "                    LEFT JOIN reservechambre r on ch.idchambre = r.idchambre\n" +
+                "                    LEFT JOIN possedecommodite p on ch.idchambre = p.idchambre\n" +
+                "                    LEFT JOIN commodite c on p.idcommodite = c.idcommodite\n" +
+                "                    where ch.idchambre = ? AND r.idchambre IS NULL OR now() NOT between r.datedebut and r.datefin\n" +
+                "                    GROUP BY ch.idchambre;");
+
 
         this.stmtChambresCommodites =  cx.getConnection()
                 .prepareStatement("select t3.idcommodite, t3.description, t3.prix"
@@ -66,6 +81,18 @@ public class TableChambres
     {
         stmtExiste.setInt(1, idChambre);
         ResultSet rset = stmtExiste.executeQuery();
+        boolean chambreExiste = rset.next();
+        rset.close();
+        return chambreExiste;
+    }
+
+    /**
+     * Vérifie si une chambre est libre.
+     */
+    public boolean isChambreLibre(int idChambre) throws SQLException
+    {
+        stmtIsChambreLibre.setInt(1, idChambre);
+        ResultSet rset = stmtIsChambreLibre.executeQuery();
         boolean chambreExiste = rset.next();
         rset.close();
         return chambreExiste;
@@ -135,4 +162,25 @@ public class TableChambres
         rset.close();
         return listCommodite;
     }
+
+    /**
+     * Trouve toutes les infos d'une chambre libre avec le prix de base + les commodites
+     */
+    public List<TupleChambre> listerChambresLibres() throws SQLException
+    {
+        ResultSet rset = stmtChambresLibre.executeQuery();
+        List<TupleChambre> listChambreLibre = new ArrayList<>();
+        while (rset.next())
+        {
+            TupleChambre chambre = new TupleChambre(rset.getInt(1),     //idchambre
+                    rset.getString(2),  //nom
+                    rset.getString(3),  //type
+                    rset.getFloat(4));  //prix de location
+
+            listChambreLibre.add(chambre);
+        }
+        rset.close();
+        return listChambreLibre;
+    }
+
 }

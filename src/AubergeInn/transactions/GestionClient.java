@@ -7,6 +7,7 @@ import AubergeInn.tables.TableReserveChambre;
 import AubergeInn.tuples.TupleClient;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class GestionClient
 {
@@ -83,15 +84,15 @@ public class GestionClient
     }
 
     /**
-     * Affiche toute les informations sur un clients de la BD
+     * Trouve toutes les informations sur un clients de la BD
      */
-    public void afficherClient(int idClient) throws SQLException
+    public TupleClient getClient(int idClient) throws SQLException
     {
 
         try{
             TupleClient unClient = client.getClient(idClient);
             cx.commit();
-            System.out.println(unClient);
+            return unClient;
         }
         catch (Exception e){
             cx.rollback();

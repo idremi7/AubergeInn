@@ -8,6 +8,7 @@ import AubergeInn.tables.TableCommodites;
 import AubergeInn.tuples.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class GestionChambre
 {
@@ -93,6 +94,21 @@ public class GestionChambre
             throw e;
         }
 
+    }
+
+    public List<TupleChambre> ListerChambresLibres() throws SQLException
+    {
+        try
+        {
+            List<TupleChambre> chambres = chambre.listerChambresLibres();
+            cx.commit();
+            return chambres;
+        }
+        catch (Exception e)
+        {
+            cx.rollback();
+            throw e;
+        }
     }
 
 }

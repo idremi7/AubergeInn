@@ -96,25 +96,4 @@ public class TableClients
         stmtDelete.setInt(1, idClient);
         return stmtDelete.executeUpdate();
     }
-
-    /**
-     * Choisir tous les livres de la BD
-     */
-    public List<TupleClient> listerLivres() throws SQLException
-    {
-        ResultSet rset = stmtListeTousClients.executeQuery();
-
-        List<TupleClient> listeLivres = new LinkedList<TupleClient>();
-        while (rset.next())
-        {
-            TupleClient client = new TupleClient(rset.getInt("idClient"),
-                                        rset.getString("nom"),
-                                        rset.getString("prenom"),
-                                        rset.getInt("age"));
-
-            listeLivres.add(client);
-        }
-        rset.close();
-        return listeLivres;
-    }
 }

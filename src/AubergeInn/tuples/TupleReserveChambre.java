@@ -4,21 +4,34 @@ import java.sql.Date;
 
 public class TupleReserveChambre
 {
+    private long idReservation;
     private int idClient;
     private int idChambre;
     private Date dateDebut;
     private Date dateFin;
+    private float prixTotal;
 
     public TupleReserveChambre()
     {
     }
 
-    public TupleReserveChambre(int idClient, int idChambre, Date dateDebut, Date dateFin)
+    public TupleReserveChambre(int idReservation, int idClient, int idChambre, Date dateDebut, Date dateFin)
     {
+        this.idReservation = idReservation;
         this.idClient = idClient;
         this.idChambre = idChambre;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+    }
+
+    public long getIdReservation()
+    {
+        return idReservation;
+    }
+
+    public void setIdReservation(long idReservation)
+    {
+        this.idReservation = idReservation;
     }
 
     public int getIdClient()
@@ -59,5 +72,15 @@ public class TupleReserveChambre
     public void setDateFin(Date dateFin)
     {
         this.dateFin = dateFin;
+    }
+
+    public float getPrixTotal()
+    {
+        return prixTotal;
+    }
+
+    public void setPrixTotal(float prixTotal)
+    {
+        this.prixTotal = prixTotal;
     }
 }

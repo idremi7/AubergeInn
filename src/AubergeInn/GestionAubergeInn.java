@@ -1,9 +1,6 @@
 package AubergeInn;
 
-import AubergeInn.tables.TableChambres;
-import AubergeInn.tables.TableClients;
-import AubergeInn.tables.TableCommodites;
-import AubergeInn.tables.TableReserveChambre;
+import AubergeInn.tables.*;
 import AubergeInn.transactions.GestionChambre;
 import AubergeInn.transactions.GestionClient;
 import AubergeInn.transactions.GestionCommodite;
@@ -18,6 +15,7 @@ public class GestionAubergeInn
     private TableChambres chambre;
     private TableCommodites commodite;
     private TableReserveChambre reservation;
+    private TablePossedeCommodite commoditeChambre;
     private GestionClient gestionClient;
     private GestionChambre gestionChambre;
     private GestionCommodite gestionCommodite;
@@ -37,14 +35,17 @@ public class GestionAubergeInn
     {
         // Allocation des objets pour le traitement des transactions
         cx = new Connexion(serveur, bd, user, password);
-//        client = new TableClients(cx);
-//        chambre = new TableChambres(cx);
-//        commodite = new TableCommodites(cx);
-//        reservation = new TableReservations(cx);
-//        setGestionClient(new GestionClient(client, reservation));
-//        setGestionChambre(new GestionChambre());
-//        setGestionCommodite(new GestionCommodite());
-//        setGestionReservation(new GestionReservation());
+
+        client = new TableClients(cx);
+        chambre = new TableChambres(cx);
+        commodite = new TableCommodites(cx);
+        commoditeChambre = new TablePossedeCommodite(cx);
+        reservation = new TableReserveChambre(cx);
+
+        setGestionClient(new GestionClient(client, reservation));
+        setGestionChambre(new GestionChambre(chambre));
+        setGestionCommodite(new GestionCommodite(commodite, commoditeChambre));
+        setGestionReservation(new GestionReservation(chambre, client, reservation));
     }
 
     public void fermer() throws SQLException
