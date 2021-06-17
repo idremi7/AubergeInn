@@ -64,8 +64,19 @@ public class GestionReservation
                 throw new IFT287Exception("Date de fin inférieure ou égale à la date d'aujourd'hui");
 
             // Vérifier si la chambre existe dans les chambre libres
-            if(!chambre.isChambreLibre(idChambre))
-                throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
+//            if(!chambre.isChambreLibre(idChambre))
+//                throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
+            List<TupleReserveChambre> listReservation = chambre.listerReservations();
+
+            for (TupleReserveChambre res : listReservation)
+            {
+                if(res.getDateDebut().before(dateDebut) && res.getDateFin().after(dateFin) ){
+                    throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
+                }
+                if(res.getDateDebut().before(dateFin) && res.getDateFin().after(dateDebut) ){
+                    throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
+                }
+            }
 
             // Creation de la reservation
             reservation.reserver(idClient, idChambre, dateDebut, dateFin);

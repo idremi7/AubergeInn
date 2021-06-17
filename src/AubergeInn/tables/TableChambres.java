@@ -5,6 +5,7 @@ import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TuplePossedeCommodite;
+import AubergeInn.tuples.TupleReserveChambre;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,10 +37,9 @@ public class TableChambres
         this.stmtDelete = cx.getConnection().prepareStatement("delete from chambre where idchambre = ?");
 
         this.stmtChambreReserve = cx.getConnection()
-            .prepareStatement("select t1.idclient, t1.nom, t1.prenom, "
-                      + "t1.age, " + "t2.idclient, t2.idchambre, t3.prixbase, t2.datedebut, t2.datefin "
-                      + "from client t1, reservechambre t2, chambre t3 "
-                      + "where  t1.idclient = t2.idclient and t3.idchambre = t2.idchambre ");
+            .prepareStatement("select t2.idreservation, t2.idclient ,t2.idchambre, t2.datedebut, t2.datefin\n" +
+                    "from  reservechambre t2, chambre t3\n" +
+                    "where t3.idchambre = t2.idchambre;");
 
         this.stmtChambresLibre = cx.getConnection()
             .prepareStatement(
@@ -185,4 +185,24 @@ public class TableChambres
         return listChambreLibre;
     }
 
+    /**
+     * Liste toute les réservations
+     */
+    public List<TupleReserveChambre> listerReservations() throws SQLException
+    {
+        ResultSet rset = stmtChambreReserve.executeQuery();
+        List<TupleReserveChambre> listReservation = new ArrayList<>();
+        while (rset.next())
+        {
+            TupleReserveChambre reservation = new TupleReserveChambre(rset.getInt(1),     //idreservation
+                    rset.getInt(2),    // idclient
+                    rset.getInt(3),    // idchambre
+                    rset.getDate(4),   // datedebut
+                    rset.getDate(5));  // datefin
+
+            listReservation.add(reservation);
+        }
+        rset.close();
+        return listReservation;
+    }
 }
