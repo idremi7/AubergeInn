@@ -103,8 +103,7 @@ public class GestionChambre
             List<TupleCommodite> commodites = chambre.listerCommodites(idChambre);
             cx.commit();
             return commodites;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;
@@ -118,8 +117,7 @@ public class GestionChambre
             List<TupleChambre> chambres = chambre.listerChambresLibres();
             cx.commit();
             return chambres;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;

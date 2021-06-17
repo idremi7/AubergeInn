@@ -40,7 +40,7 @@ public class GestionCommodite
         {
             // Vérifie si la commodite existe déja
             if (commodite.existe(idCommodite))
-                throw new IFT287Exception("Chambre existe déjà: "+ idCommodite);
+                throw new IFT287Exception("Chambre existe déjà: " + idCommodite);
 
             // Ajout d'une commodite dans la table des commodite
             commodite.ajouter(idCommodite, description, prix);
@@ -76,8 +76,7 @@ public class GestionCommodite
 
             // Commit
             cx.commit();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;
@@ -95,7 +94,7 @@ public class GestionCommodite
         {
             // Vérifie si la commodite existe déja
             if (commoditeChambre.existe(idCommodite, idChambre))
-                throw new IFT287Exception("le lien de la commodite : "+ idCommodite +"avec la chambre "+idChambre +"existe déjà!");
+                throw new IFT287Exception("le lien de la commodite : " + idCommodite + "avec la chambre " + idChambre + "existe déjà!");
 
             // Ajout d'une commoditeChambre dans la table possedeCommodite
             commoditeChambre.ajouter(idCommodite, idChambre);
@@ -124,12 +123,11 @@ public class GestionCommodite
             // Suppression d'une commodite pour une chambre.
             int nb = commoditeChambre.supprimer(idCommodite, idChambre);
             if (nb == 0)
-                throw new IFT287Exception("Lien Commodite-Chambre " + idCommodite+"-"+idChambre + " inexistant");
+                throw new IFT287Exception("Lien Commodite-Chambre " + idCommodite + "-" + idChambre + " inexistant");
 
             // Commit
             cx.commit();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;

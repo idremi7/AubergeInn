@@ -88,13 +88,9 @@ public class TableCommodites
 
             rset.close();
             return tupleCommodite;
-        }
-        else
+        } else
             return null;
     }
-
-
-
 
 
 }

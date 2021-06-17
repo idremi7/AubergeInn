@@ -18,12 +18,12 @@ import java.util.StringTokenizer;
  * Fichier de base pour le TP2 du cours IFT287
  *
  * <pre>
- * 
+ *
  * Vincent Ducharme
  * Universite de Sherbrooke
  * Version 1.0 - 7 juillet 2016
  * IFT287 - Exploitation de BD relationnelles et OO
- * 
+ *
  * Ce programme permet d'appeler des transactions d'un systeme
  * de gestion utilisant une base de donnees.
  *
@@ -76,8 +76,7 @@ public class AubergeInn
                 executerTransaction(transaction);
                 transaction = lireTransaction(reader);
             }
-        }
-        finally
+        } finally
         {
             if (aubergeInnInstance != null)
                 aubergeInnInstance.fermer();
@@ -171,7 +170,7 @@ public class AubergeInn
                     // Lecture des parametres
                     int idCommodite = readInt(tokenizer);
                     String description = readString(tokenizer);
-                    float prix =  Float.parseFloat(readString(tokenizer));
+                    float prix = Float.parseFloat(readString(tokenizer));
 
                     //appel methode traitement pour la transaction
                     gestionAubergeInn.getGestionCommodite().ajouterCommodite(idCommodite, description, prix);
@@ -208,8 +207,9 @@ public class AubergeInn
                     //appel methode traitement pour la transaction
                     List<TupleChambre> listeChambres = gestionAubergeInn.getGestionChambre().ListerChambresLibres();
                     System.out.println("\nid nom type prixLocation");
-                    for(TupleChambre chambre : listeChambres){
-                        System.out.println(chambre.getIdChambre() + " " + chambre.getNom() + " " + chambre.getType()+ " " + chambre.getPrixBase());
+                    for (TupleChambre chambre : listeChambres)
+                    {
+                        System.out.println(chambre.getIdChambre() + " " + chambre.getNom() + " " + chambre.getType() + " " + chambre.getPrixBase());
                     }
                 }
                 // *******************************************************************************
@@ -232,8 +232,9 @@ public class AubergeInn
                             .listerToutesReservationClient(idClient);
                     System.out.println("\nRéservation:");
                     System.out.println("\nid dateDebut dateFin prixTotal");
-                    for(TupleReserveChambre reserve : reserveChambres){
-                        System.out.println(reserve.getIdReservation() + " " + reserve.getDateDebut() + " " + reserve.getDateFin()+ " " + reserve.getPrixTotal());
+                    for (TupleReserveChambre reserve : reserveChambres)
+                    {
+                        System.out.println(reserve.getIdReservation() + " " + reserve.getDateDebut() + " " + reserve.getDateFin() + " " + reserve.getPrixTotal());
                     }
                 }
                 // *******************************************************************************
@@ -255,7 +256,8 @@ public class AubergeInn
                     List<TupleCommodite> commodites = gestionAubergeInn.getGestionChambre().ListerCommodites(idChambre);
                     System.out.print("\nCommoditées:");
                     System.out.println("\nid description prix");
-                    for(TupleCommodite commodite : commodites){
+                    for (TupleCommodite commodite : commodites)
+                    {
                         System.out.println(commodite.getIdCommodite() + " " + commodite.getDescription() + " " + commodite.getPrix());
                     }
                 }
@@ -271,14 +273,12 @@ public class AubergeInn
                     Date dateFin = readDate(tokenizer);
                     //appel methode traitement pour la transaction
                     gestionAubergeInn.getGestionReservation().reserver(idClient, idChambre, dateDebut, dateFin);
-                }
-                else
+                } else
                 {
                     System.out.println(" : Transaction non reconnue. Essayer \"aide\"");
                 }
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             System.out.println(" " + e.toString());
             // Ce rollback est ici seulement pour vous aider et éviter des problèmes lors de la correction
@@ -288,7 +288,9 @@ public class AubergeInn
         }
     }
 
-    /** Affiche le menu des transactions acceptées par le système */
+    /**
+     * Affiche le menu des transactions acceptées par le système
+     */
     private static void afficherAide()
     {
         System.out.println();
@@ -311,7 +313,7 @@ public class AubergeInn
         System.out.println("  afficherChambre <idChambre>");
         System.out.println("  reserver <idClient> <idChambre> <dateDebut> <dateFin>");
     }
-    
+
     // ****************************************************************
     // *   Les methodes suivantes n'ont pas besoin d'etre modifiees   *
     // ****************************************************************
@@ -346,7 +348,9 @@ public class AubergeInn
         return (transaction == null || transaction.equals("quitter"));
     }
 
-    /** Lecture d'une chaine de caracteres de la transaction entree a l'ecran */
+    /**
+     * Lecture d'une chaine de caracteres de la transaction entree a l'ecran
+     */
     static String readString(StringTokenizer tokenizer) throws Exception
     {
         if (tokenizer.hasMoreElements())
@@ -366,13 +370,11 @@ public class AubergeInn
             try
             {
                 return Integer.valueOf(token).intValue();
-            }
-            catch (NumberFormatException e)
+            } catch (NumberFormatException e)
             {
                 throw new Exception("Nombre attendu a la place de \"" + token + "\"");
             }
-        }
-        else
+        } else
             throw new Exception("Autre parametre attendu");
     }
 
@@ -384,13 +386,11 @@ public class AubergeInn
             try
             {
                 return Date.valueOf(token);
-            }
-            catch (IllegalArgumentException e)
+            } catch (IllegalArgumentException e)
             {
                 throw new Exception("Date dans un format invalide - \"" + token + "\"");
             }
-        }
-        else
+        } else
             throw new Exception("Autre parametre attendu");
     }
 

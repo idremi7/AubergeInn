@@ -69,8 +69,7 @@ public class TableClients
 
             rset.close();
             return tupleClient;
-        }
-        else
+        } else
             return null;
     }
 

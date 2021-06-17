@@ -4,7 +4,6 @@ package AubergeInn.tables;
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleCommodite;
-import AubergeInn.tuples.TuplePossedeCommodite;
 import AubergeInn.tuples.TupleReserveChambre;
 
 import java.sql.PreparedStatement;
@@ -32,24 +31,24 @@ public class TableChambres
         this.cx = cx;
         this.stmtExiste = cx.getConnection().prepareStatement("select idchambre, nom, type, prixbase from chambre where idchambre = ?");
         this.stmtInsert = cx.getConnection().prepareStatement("insert into chambre (idchambre, nom, type, prixbase) "
-                                + "values (?,?,?,?)");
+                + "values (?,?,?,?)");
         this.stmtUpdate = cx.getConnection().prepareStatement("update chambre set nom = ?, type = ?, prixbase = ? " + "where idchambre = ?");
         this.stmtDelete = cx.getConnection().prepareStatement("delete from chambre where idchambre = ?");
 
         this.stmtChambreReserve = cx.getConnection()
-            .prepareStatement("select t2.idreservation, t2.idclient ,t2.idchambre, t2.datedebut, t2.datefin\n" +
-                    "from  reservechambre t2, chambre t3\n" +
-                    "where t3.idchambre = t2.idchambre;");
+                .prepareStatement("select t2.idreservation, t2.idclient ,t2.idchambre, t2.datedebut, t2.datefin\n" +
+                        "from  reservechambre t2, chambre t3\n" +
+                        "where t3.idchambre = t2.idchambre;");
 
         this.stmtChambresLibre = cx.getConnection()
-            .prepareStatement(
-                    "Select ch.idchambre, ch.nom, ch.type , (ch.prixbase + coalesce(SUM(c.prix),0)) as prixLocation " +
-                    "from chambre ch " +
-                    "LEFT JOIN reservechambre r on ch.idchambre = r.idchambre " +
-                    "LEFT JOIN possedecommodite p on ch.idchambre = p.idchambre " +
-                    "LEFT JOIN commodite c on p.idcommodite = c.idcommodite " +
-                    "where r.idchambre IS NULL OR now() NOT between r.datedebut and r.datefin " +
-                    "GROUP BY ch.idchambre;");
+                .prepareStatement(
+                        "Select ch.idchambre, ch.nom, ch.type , (ch.prixbase + coalesce(SUM(c.prix),0)) as prixLocation " +
+                                "from chambre ch " +
+                                "LEFT JOIN reservechambre r on ch.idchambre = r.idchambre " +
+                                "LEFT JOIN possedecommodite p on ch.idchambre = p.idchambre " +
+                                "LEFT JOIN commodite c on p.idcommodite = c.idcommodite " +
+                                "where r.idchambre IS NULL OR now() NOT between r.datedebut and r.datefin " +
+                                "GROUP BY ch.idchambre;");
 
         this.stmtIsChambreLibre = cx.getConnection().prepareStatement("Select ch.idchambre, ch.nom, ch.type , (ch.prixbase + coalesce(SUM(c.prix),0)) as prixLocation\n" +
                 "                    from chambre ch\n" +
@@ -60,7 +59,7 @@ public class TableChambres
                 "                    GROUP BY ch.idchambre;");
 
 
-        this.stmtChambresCommodites =  cx.getConnection()
+        this.stmtChambresCommodites = cx.getConnection()
                 .prepareStatement("select c.*\n" +
                         "from chambre t1\n" +
                         "JOIN possedecommodite p on t1.idchambre = p.idchambre\n" +
@@ -117,8 +116,7 @@ public class TableChambres
 
             rset.close();
             return tupleChambre;
-        }
-        else
+        } else
             return null;
     }
 
@@ -156,8 +154,8 @@ public class TableChambres
         while (rset.next())
         {
             TupleCommodite commodite = new TupleCommodite(rset.getInt(1),     //id
-                                                          rset.getString(2),  //description
-                                                          rset.getFloat(3));  //prix
+                    rset.getString(2),  //description
+                    rset.getFloat(3));  //prix
 
             listCommodite.add(commodite);
         }

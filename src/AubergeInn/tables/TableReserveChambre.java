@@ -30,7 +30,7 @@ public class TableReserveChambre
         this.stmtExiste = cx.getConnection()
                 .prepareStatement("select idclient, idchambre, datedebut, datefin from reservechambre where idclient = ? and idchambre = ?");
         this.stmtInsert = cx.getConnection()
-                .prepareStatement("insert into reservechambre (idclient, idchambre, datedebut, datefin) "+ "values (?,?,?,?)");
+                .prepareStatement("insert into reservechambre (idclient, idchambre, datedebut, datefin) " + "values (?,?,?,?)");
         this.stmtUpdate = cx.getConnection()
                 .prepareStatement("update reservechambre " +
                         "set idclient = ?, idchambre = ?, datedebut = ?, datefin = ? " + "where idclient = ? and idchambre = ?");
@@ -92,8 +92,7 @@ public class TableReserveChambre
             tupleReserveChambre.setDateDebut(rset.getDate(3));
             tupleReserveChambre.setDateFin(rset.getDate(4));
             return tupleReserveChambre;
-        }
-        else
+        } else
         {
             return null;
         }
@@ -114,8 +113,7 @@ public class TableReserveChambre
             tupleReservation.setDateDebut(rset.getDate(3));
             tupleReservation.setDateFin(rset.getDate(4));
             return tupleReservation;
-        }
-        else
+        } else
         {
             return null;
         }
@@ -143,7 +141,7 @@ public class TableReserveChambre
 
             listReserveChambres.add(tupleReservation);
         }
-       rset.close();
+        rset.close();
         return listReserveChambres;
     }
 
@@ -162,8 +160,7 @@ public class TableReserveChambre
             tupleReservation.setDateDebut(rset.getDate(3));
             tupleReservation.setDateFin(rset.getDate(4));
             return tupleReservation;
-        }
-        else
+        } else
         {
             return null;
         }

@@ -25,9 +25,9 @@ public class GestionAubergeInn
      * Ouvre une connexion avec la BD relationnelle et alloue les gestionnaires
      * de transactions et de tables.
      *
-     * @param serveur SQL
-     * @param bd nom de la bade de données
-     * @param user user id pour établir une connexion avec le serveur SQL
+     * @param serveur  SQL
+     * @param bd       nom de la bade de données
+     * @param user     user id pour établir une connexion avec le serveur SQL
      * @param password mot de passe pour le user id
      */
     public GestionAubergeInn(String serveur, String bd, String user, String password)

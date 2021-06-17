@@ -4,24 +4,21 @@ import java.sql.*;
 
 /**
  * Gestionnaire d'une connexion avec une BD relationnelle via JDBC.<br><br>
- * 
+ * <p>
  * Cette classe ouvre une connexion avec une BD via JDBC.<br>
  * La méthode serveursSupportes() indique les serveurs supportés.<br>
  * <pre>
  * Pré-condition
  *   Le driver JDBC approprié doit être accessible.
- * 
+ *
  * Post-condition
- *   La connexion est ouverte en mode autocommit false et sérialisable, 
+ *   La connexion est ouverte en mode autocommit false et sérialisable,
  *   (s'il est supporté par le serveur).
  * </pre>
  * <br>
  * IFT287 - Exploitation de BD relationnelles et OO
- * 
+ *
  * @author Marc Frappier - Université de Sherbrooke
- * @version Version 2.0 - 13 novembre 2004
- * 
- * 
  * @author Vincent Ducharme - Université de Sherbrooke
  * @version Version 3.0 - 21 mai 2016
  */
@@ -32,7 +29,7 @@ public class Connexion
     /**
      * Ouverture d'une connexion en mode autocommit false et sérialisable (si
      * supporté)
-     * 
+     *
      * @param serveur Le type de serveur SQL à utiliser (Valeur : local, dinf).
      * @param bd      Le nom de la base de données sur le serveur.
      * @param user    Le nom d'utilisateur à utiliser pour se connecter à la base de données.
@@ -44,18 +41,16 @@ public class Connexion
         Driver d;
         try
         {
-            d = (Driver)Class.forName("org.postgresql.Driver").newInstance();
+            d = (Driver) Class.forName("org.postgresql.Driver").newInstance();
             DriverManager.registerDriver(d);
-            
+
             if (serveur.equals("local"))
             {
                 conn = DriverManager.getConnection("jdbc:postgresql:" + bd, user, pass);
-            }
-            else if (serveur.equals("dinf"))
+            } else if (serveur.equals("dinf"))
             {
                 conn = DriverManager.getConnection("jdbc:postgresql://bd-info2.dinf.usherbrooke.ca:5432/" + bd + "?ssl=true&sslmode=require", user, pass);
-            }
-            else
+            } else
             {
                 throw new IFT287Exception("Serveur inconnu");
             }
@@ -72,19 +67,16 @@ public class Connexion
                 System.out.println("Ouverture de la connexion en mode sérialisable :\n"
                         + "Connecté sur la BD postgreSQL "
                         + bd + " avec l'utilisateur " + user);
-            }
-            else
+            } else
             {
                 System.out.println("Ouverture de la connexion en mode read committed (default) :\n"
                         + "Connecté sur la BD postgreSQL "
                         + bd + " avec l'utilisateur " + user);
             }
-        }
-        catch (SQLException e)
+        } catch (SQLException e)
         {
             throw e;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace(System.out);
             throw new IFT287Exception("JDBC Driver non instancié");
@@ -142,6 +134,6 @@ public class Connexion
     public static String serveursSupportes()
     {
         return "local : PostgreSQL installé localement\n"
-             + "dinf  : PostgreSQL installé sur les serveurs du département\n";
+                + "dinf  : PostgreSQL installé sur les serveurs du département\n";
     }
 }

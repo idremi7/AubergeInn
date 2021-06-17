@@ -22,7 +22,7 @@ public class TablePossedeCommodite
         this.cx = cx;
         this.stmtExiste = cx.getConnection().prepareStatement("select * from possedecommodite where idcommodite = ? and idchambre = ?");
         this.stmtInsert = cx.getConnection()
-                .prepareStatement("insert into possedecommodite (idcommodite, idchambre) "+ "values (?,?)");
+                .prepareStatement("insert into possedecommodite (idcommodite, idchambre) " + "values (?,?)");
         this.stmtUpdate = cx.getConnection()
                 .prepareStatement("update possedecommodite " +
                         "set idcommodite = ?, idchambre = ? " + "where idcommodite = ? and idchambre = ?");
@@ -66,8 +66,7 @@ public class TablePossedeCommodite
 
             rset.close();
             return tuplePossedeCommodite;
-        }
-        else
+        } else
             return null;
     }
 

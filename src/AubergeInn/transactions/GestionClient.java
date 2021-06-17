@@ -45,8 +45,7 @@ public class GestionClient
 
             // Commit
             cx.commit();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;
@@ -75,8 +74,7 @@ public class GestionClient
 
             // Commit
             cx.commit();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;
@@ -89,12 +87,13 @@ public class GestionClient
     public TupleClient getClient(int idClient) throws SQLException
     {
 
-        try{
+        try
+        {
             TupleClient unClient = client.getClient(idClient);
             cx.commit();
             return unClient;
-        }
-        catch (Exception e){
+        } catch (Exception e)
+        {
             cx.rollback();
             throw e;
         }

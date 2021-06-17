@@ -70,11 +70,13 @@ public class GestionReservation
 
             for (TupleReserveChambre res : listReservation)
             {
-                if(res.getDateDebut().before(dateDebut) && res.getDateFin().after(dateFin) ){
-                    throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
+                if (res.getDateDebut().before(dateDebut) && res.getDateFin().after(dateFin))
+                {
+                    throw new IFT287Exception("La chambre : " + idChambre + " n'est pas libre");
                 }
-                if(res.getDateDebut().before(dateFin) && res.getDateFin().after(dateDebut) ){
-                    throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
+                if (res.getDateDebut().before(dateFin) && res.getDateFin().after(dateDebut))
+                {
+                    throw new IFT287Exception("La chambre : " + idChambre + " n'est pas libre");
                 }
             }
 
@@ -83,8 +85,7 @@ public class GestionReservation
 
             // Commit
             cx.commit();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;
@@ -97,12 +98,13 @@ public class GestionReservation
     public List<TupleReserveChambre> listerToutesReservationClient(int idClient) throws SQLException
     {
 
-        try{
+        try
+        {
             List<TupleReserveChambre> reserveChambres = reservation.getReservationPrixClient(idClient);
             cx.commit();
             return reserveChambres;
-        }
-        catch (Exception e){
+        } catch (Exception e)
+        {
             cx.rollback();
             throw e;
         }
