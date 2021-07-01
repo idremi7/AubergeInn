@@ -1,5 +1,8 @@
 package AubergeInn.tuples;
 
+import javax.persistence.Entity;
+
+@Entity
 public class TupleClient
 {
     private int idClient;
