@@ -42,7 +42,7 @@ public class Connexion
      * @param pass    Le mot de passe associé à l'utilisateur.
      */
     public Connexion(String serveur, String bd, String user, String pass)
-            throws IFT287Exception, SQLException
+            throws IFT287Exception
     {
 
         if (serveur.equals("local"))
@@ -70,7 +70,7 @@ public class Connexion
     /**
      * Fermeture d'une connexion
      */
-    public void fermer() throws SQLException
+    public void fermer()
     {
         em.close();
         emf.close();
@@ -85,7 +85,7 @@ public class Connexion
     /**
      * Commit
      */
-    public void commit() throws SQLException
+    public void commit()
     {
        em.getTransaction().commit();
     }
@@ -93,7 +93,7 @@ public class Connexion
     /**
      * Rollback
      */
-    public void rollback() throws SQLException
+    public void rollback()
     {
         em.getTransaction().rollback();
     }

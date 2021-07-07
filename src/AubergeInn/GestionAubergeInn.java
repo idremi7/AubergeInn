@@ -11,15 +11,15 @@ import java.sql.SQLException;
 public class GestionAubergeInn
 {
     private Connexion cx;
-//    private TableClients client;
+    private TableClients client;
     private TableChambres chambre;
-//    private TableCommodites commodite;
-//    private TableReserveChambre reservation;
+    private TableCommodites commodite;
+    private TableReserveChambre reservation;
 //    private TablePossedeCommodite commoditeChambre;
-//    private GestionClient gestionClient;
+    private GestionClient gestionClient;
     private GestionChambre gestionChambre;
-//    private GestionCommodite gestionCommodite;
-//    private GestionReservation gestionReservation;
+    private GestionCommodite gestionCommodite;
+    private GestionReservation gestionReservation;
 
     /**
      * Ouvre une connexion avec la BD relationnelle et alloue les gestionnaires
@@ -36,16 +36,16 @@ public class GestionAubergeInn
         // Allocation des objets pour le traitement des transactions
         cx = new Connexion(serveur, bd, user, password);
 
-        //client = new TableClients(cx);
+        client = new TableClients(cx);
         chambre = new TableChambres(cx);
-//        commodite = new TableCommodites(cx);
+        commodite = new TableCommodites(cx);
 //        commoditeChambre = new TablePossedeCommodite(cx);
-//        reservation = new TableReserveChambre(cx);
+        reservation = new TableReserveChambre(cx);
 //
-//        setGestionClient(new GestionClient(client, reservation));
-//        setGestionChambre(new GestionChambre(chambre));
-//        setGestionCommodite(new GestionCommodite(commodite, commoditeChambre));
-//        setGestionReservation(new GestionReservation(chambre, client, reservation));
+        setGestionClient(new GestionClient(client, reservation));
+        setGestionChambre(new GestionChambre(chambre, reservation));
+        setGestionCommodite(new GestionCommodite(commodite, chambre));
+        //setGestionReservation(new GestionReservation(chambre, client, reservation));
     }
 
     public void fermer() throws SQLException
@@ -61,44 +61,44 @@ public class GestionAubergeInn
     {
         cx.rollback();
     }
-//
-//    public GestionClient getGestionClient()
-//    {
-//        return gestionClient;
-//    }
 
-//    public void setGestionClient(GestionClient gestionClient)
-//    {
-//        this.gestionClient = gestionClient;
-//    }
-//
-//    public GestionChambre getGestionChambre()
-//    {
-//        return gestionChambre;
-//    }
-//
-//    public void setGestionChambre(GestionChambre gestionChambre)
-//    {
-//        this.gestionChambre = gestionChambre;
-//    }
-//
-//    public GestionCommodite getGestionCommodite()
-//    {
-//        return gestionCommodite;
-//    }
-//
-//    public void setGestionCommodite(GestionCommodite gestionCommodite)
-//    {
-//        this.gestionCommodite = gestionCommodite;
-//    }
-//
-//    public GestionReservation getGestionReservation()
-//    {
-//        return gestionReservation;
-//    }
-//
-//    public void setGestionReservation(GestionReservation gestionReservation)
-//    {
-//        this.gestionReservation = gestionReservation;
-//    }
+    public GestionClient getGestionClient()
+    {
+        return gestionClient;
+    }
+
+    public void setGestionClient(GestionClient gestionClient)
+    {
+        this.gestionClient = gestionClient;
+    }
+
+    public GestionChambre getGestionChambre()
+    {
+        return gestionChambre;
+    }
+
+    public void setGestionChambre(GestionChambre gestionChambre)
+    {
+        this.gestionChambre = gestionChambre;
+    }
+
+    public GestionCommodite getGestionCommodite()
+    {
+        return gestionCommodite;
+    }
+
+    public void setGestionCommodite(GestionCommodite gestionCommodite)
+    {
+        this.gestionCommodite = gestionCommodite;
+    }
+
+    public GestionReservation getGestionReservation()
+    {
+        return gestionReservation;
+    }
+
+    public void setGestionReservation(GestionReservation gestionReservation)
+    {
+        this.gestionReservation = gestionReservation;
+    }
 }

@@ -1,10 +1,16 @@
 package AubergeInn.tuples;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 public class TupleClient
 {
+    @Id
+    @GeneratedValue
+    private long id;
+
     private int idClient;
     private String nom;
     private String prenom;
@@ -61,6 +67,7 @@ public class TupleClient
     {
         this.age = age;
     }
+
 
     @Override
     public String toString()

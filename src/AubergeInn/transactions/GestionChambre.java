@@ -5,26 +5,33 @@ import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
 import AubergeInn.tables.TableChambres;
 import AubergeInn.tables.TableCommodites;
+import AubergeInn.tables.TableReserveChambre;
 import AubergeInn.tuples.*;
 
+import java.net.StandardSocketOptions;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GestionChambre
 {
-    private TableChambres chambre;
-    private TableCommodites commodite;
+    private TableChambres chambres;
+    private TableReserveChambre reservations;
+    private TableCommodites commodites;
     private Connexion cx;
 
     /**
      * Creation d'une instance
      */
-    public GestionChambre(TableChambres chambre) throws IFT287Exception
+    public GestionChambre(TableChambres chambre, TableReserveChambre reservation) throws IFT287Exception
     {
         this.cx = chambre.getConnexion();
-//        if (chambre.getConnexion() != reservation.getConnexion())
-//            throw new IFT287Exception("Les instances de chambre et de reservation n'utilisent pas la même connexion au serveur");
-        this.chambre = chambre;
+        if (chambre.getConnexion() != reservation.getConnexion())
+            throw new IFT287Exception("Les collections d'objets n'utilisent pas la même connexion au serveur");
+        this.chambres = chambre;
+        this.reservations = reservation;
     }
 
     /**
@@ -32,16 +39,20 @@ public class GestionChambre
      * exception est levée.
      */
     public void ajouterChambre(int idChambre, String nom, String type, float prixBase)
-            throws SQLException, IFT287Exception, Exception
+            throws IFT287Exception, Exception
     {
         try
         {
+            cx.demarreTransaction();
+
+            TupleChambre chambre = new TupleChambre(idChambre, nom, type, prixBase);
+
             // Vérifie si la chambre existe déja
-            if (chambre.existe(idChambre))
+            if (chambres.existe(idChambre))
                 throw new IFT287Exception("Chambre existe déjà: " + idChambre);
 
             // Ajout d'une chambre dans la table des chambres
-            //chambre.ajouter(idChambre, nom, type, prixBase);
+            chambres.ajouter(chambre);
 
             // Commit
             cx.commit();
@@ -52,76 +63,97 @@ public class GestionChambre
         }
     }
 
-//    /**
-//     * Supprimer une chambre.
-//     */
-//    public void supprimerChambre(int idChambre) throws SQLException, IFT287Exception, Exception
-//    {
-//        try
-//        {
-//            // Validation
-//            TupleChambre tupleChambre = chambre.getChambre(idChambre);
-//            if (tupleChambre == null)
-//                throw new IFT287Exception("Chambre inexistant: " + idChambre);
-//
-//            // Suppression du chambre.
-//            int nb = chambre.supprimer(idChambre);
-//            if (nb == 0)
-//                throw new IFT287Exception("Chambre " + idChambre + " inexistant");
-//
-//            // Commit
-//            cx.commit();
-//        } catch (Exception e)
-//        {
-//            cx.rollback();
-//            throw e;
-//        }
-//    }
-//
-//    /**
-//     * Cette commande obtiens une chambre
-//     */
-//    public TupleChambre getChambre(int idChambre) throws SQLException
-//    {
-//        try
-//        {
-//            TupleChambre uneChambre = chambre.getChambre(idChambre);
-//            cx.commit();
-//            return uneChambre;
-//        } catch (Exception e)
-//        {
-//            cx.rollback();
-//            throw e;
-//        }
-//
-//    }
-//
-//    public List<TupleCommodite> ListerCommodites(int idChambre) throws SQLException
-//    {
-//        try
-//        {
-//            List<TupleCommodite> commodites = chambre.listerCommodites(idChambre);
-//            cx.commit();
-//            return commodites;
-//        } catch (Exception e)
-//        {
-//            cx.rollback();
-//            throw e;
-//        }
-//    }
-//
-//    public List<TupleChambre> ListerChambresLibres() throws SQLException
-//    {
-//        try
-//        {
-//            List<TupleChambre> chambres = chambre.listerChambresLibres();
-//            cx.commit();
-//            return chambres;
-//        } catch (Exception e)
-//        {
-//            cx.rollback();
-//            throw e;
-//        }
-//    }
+    /**
+     * Supprimer une chambre.
+     */
+    public void supprimerChambre(int idChambre) throws IFT287Exception, Exception
+    {
+        try
+        {
+            //demarre transaction
+            cx.demarreTransaction();
+            // Validation
+            TupleChambre chambre = chambres.getChambre(idChambre);
+            if (chambre == null)
+                throw new IFT287Exception("Chambre inexistant: " + idChambre);
 
+            // Suppression du chambre.
+            if (!chambres.supprimer(chambre))
+                throw new IFT287Exception("Chambre " + idChambre + " inexistant");
+
+            cx.commit();
+        }
+        catch (Exception e)
+        {
+            cx.rollback();
+            throw e;
+        }
+    }
+
+
+    /**
+     * Cette commande obtiens une chambre
+     */
+    public TupleChambre getChambre(int idChambre) throws SQLException
+    {
+        try
+        {
+            cx.demarreTransaction();
+            TupleChambre uneChambre = chambres.getChambre(idChambre);
+            cx.commit();
+            return uneChambre;
+        } catch (Exception e)
+        {
+            cx.rollback();
+            throw e;
+        }
+
+    }
+
+    public List<TupleCommodite> ListerCommodites(int idChambre) throws SQLException
+    {
+        try
+        {
+            List<TupleCommodite> commodites = chambres.listerCommodites(idChambre);
+            cx.commit();
+            return commodites;
+        } catch (Exception e)
+        {
+            cx.rollback();
+            throw e;
+        }
+    }
+
+
+
+    /**
+     * Affiche les chambres libres
+     */
+    public void AfficherChambresLibres()
+    {
+        cx.demarreTransaction();
+        List<TupleChambre> listeChambre = chambres.listerChambresLibre();
+        for (TupleChambre ch : listeChambre)
+        {
+                ch.afficherInfosChambre();
+        }
+        cx.commit();
+    }
+
+    /**
+     * Affiche tous les Chambre de la BD
+     */
+    public void ListerChambres()
+    {
+        cx.demarreTransaction();
+
+        List<TupleChambre> listeChambre = chambres.listerChambres();
+
+        for (TupleChambre ch : listeChambre)
+        {
+            System.out.println(ch.getIdChambre() + " " + ch.getNom() + " " + ch.getType() + " " + ch.getPrixBase());
+        }
+
+        cx.commit();
+    }
 }

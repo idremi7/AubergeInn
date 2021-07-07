@@ -1,8 +1,6 @@
 package AubergeInn.tuples;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class TupleCommodite

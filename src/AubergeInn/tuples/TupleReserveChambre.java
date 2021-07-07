@@ -1,25 +1,30 @@
 package AubergeInn.tuples;
 
-import java.sql.Date;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
 public class TupleReserveChambre
 {
+    @Id
+    @GeneratedValue
+    private long id;
+
     private long idReservation;
-    private int idClient;
-    private int idChambre;
+    private TupleClient client;
+    private TupleChambre chambre;
     private Date dateDebut;
     private Date dateFin;
-    private float prixTotal;
 
     public TupleReserveChambre()
     {
     }
 
-    public TupleReserveChambre(int idReservation, int idClient, int idChambre, Date dateDebut, Date dateFin)
+    public TupleReserveChambre(int idReservation, TupleClient client, TupleChambre chambre, Date dateDebut, Date dateFin)
     {
         this.idReservation = idReservation;
-        this.idClient = idClient;
-        this.idChambre = idChambre;
+        this.client = client;
+        this.chambre = chambre;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
@@ -34,24 +39,24 @@ public class TupleReserveChambre
         this.idReservation = idReservation;
     }
 
-    public int getIdClient()
+    public TupleClient getClient()
     {
-        return idClient;
+        return client;
     }
 
-    public void setIdClient(int idClient)
+    public void setClient(TupleClient client)
     {
-        this.idClient = idClient;
+        this.client = client;
     }
 
-    public int getIdChambre()
+    public TupleChambre getChambre()
     {
-        return idChambre;
+        return chambre;
     }
 
-    public void setIdChambre(int idChambre)
+    public void setChambre(TupleChambre chambre)
     {
-        this.idChambre = idChambre;
+        this.chambre = chambre;
     }
 
     public Date getDateDebut()
@@ -74,13 +79,4 @@ public class TupleReserveChambre
         this.dateFin = dateFin;
     }
 
-    public float getPrixTotal()
-    {
-        return prixTotal;
-    }
-
-    public void setPrixTotal(float prixTotal)
-    {
-        this.prixTotal = prixTotal;
-    }
 }
