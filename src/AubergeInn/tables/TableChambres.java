@@ -51,7 +51,7 @@ public class TableChambres
     public boolean existe(int idChambre)
     {
         stmtExiste.setParameter("idchambre", idChambre);
-        return  !stmtExiste.getResultList().isEmpty();
+        return !stmtExiste.getResultList().isEmpty();
     }
 
 
