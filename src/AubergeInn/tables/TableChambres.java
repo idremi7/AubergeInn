@@ -58,7 +58,7 @@ public class TableChambres
     /**
      * Lecture d'une chambre.
      */
-    public TupleChambre getChambre(int idChambre) throws SQLException
+    public TupleChambre getChambre(int idChambre)
     {
         stmtExiste.setParameter("idchambre", idChambre);
         List<TupleChambre> chambres = stmtExiste.getResultList();
@@ -124,6 +124,15 @@ public class TableChambres
             return reservations.get(0);
         }
         return null;
+    }
+
+    /**
+     * Lecture de la première reservation d'un chambre.
+     */
+    public List<TupleReserveChambre> listerReservationsChambre(TupleChambre chambre)
+    {
+        stmtListeReservationChambre.setParameter("chambre", chambre);
+        return stmtListeReservationChambre.getResultList();
     }
 
     /**

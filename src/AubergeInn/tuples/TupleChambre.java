@@ -1,10 +1,7 @@
 package AubergeInn.tuples;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class TupleChambre
@@ -18,11 +15,12 @@ public class TupleChambre
     private String type;
     private float prixBase;
 
-    @OneToMany(mappedBy = "chambres", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<TupleCommodite> commodites;
 
     public TupleChambre()
     {
+        this.commodites = new ArrayList<>();
     }
 
     public TupleChambre(int idChambre, String nom, String type, float prixBase)
@@ -79,6 +77,14 @@ public class TupleChambre
         return commodites;
     }
 
+    public boolean isCommoditeExiste(TupleCommodite c){
+        if (commodites.contains(c)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public void setCommodites(List<TupleCommodite> commodites)
     {
         this.commodites = commodites;
@@ -101,12 +107,12 @@ public class TupleChambre
 
     public float calculerPrixTotal(){
 
-        float total = prixBase;
+        float total = 0;
         for (TupleCommodite c : commodites)
         {
             total += c.getPrix();
         }
-        return total;
+        return total + prixBase;
     }
 
     public void afficherInfosChambre()

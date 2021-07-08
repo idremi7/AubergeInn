@@ -94,12 +94,14 @@ public class GestionChambre
     /**
      * Cette commande obtiens une chambre
      */
-    public TupleChambre getChambre(int idChambre) throws SQLException
+    public TupleChambre getChambre(int idChambre) throws IFT287Exception, Exception
     {
         try
         {
             cx.demarreTransaction();
             TupleChambre uneChambre = chambres.getChambre(idChambre);
+            if (uneChambre == null)
+                throw new IFT287Exception("Chambre inexistant: " + idChambre);
             cx.commit();
             return uneChambre;
         } catch (Exception e)
@@ -110,10 +112,11 @@ public class GestionChambre
 
     }
 
-    public List<TupleCommodite> ListerCommodites(int idChambre) throws SQLException
+    public List<TupleCommodite> ListerCommodites(int idChambre)
     {
         try
         {
+            cx.demarreTransaction();
             List<TupleCommodite> commodites = chambres.listerCommodites(idChambre);
             cx.commit();
             return commodites;

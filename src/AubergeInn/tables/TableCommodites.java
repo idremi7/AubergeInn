@@ -10,13 +10,17 @@ import java.util.List;
 public class TableCommodites
 {
     private final TypedQuery<TupleCommodite> stmtExiste;
+    private final TypedQuery<TupleCommodite> stmtListerCommodites;
     private final Connexion cx;
 
-    public TableCommodites(Connexion cx) throws SQLException
+    public TableCommodites(Connexion cx)
     {
         this.cx = cx;
         this.stmtExiste = cx.getConnection()
                 .createQuery("select c from TupleCommodite c where c.idCommodite = :idcommodite", TupleCommodite.class);
+
+        this.stmtListerCommodites = cx.getConnection()
+                .createQuery("select c from TupleCommodite c", TupleCommodite.class);
     }
 
     /**
@@ -76,5 +80,12 @@ public class TableCommodites
         }
     }
 
+    /**
+     * Lecture d'une commodite.
+     */
+    public List<TupleCommodite> ListerCommodites()
+    {
+       return stmtListerCommodites.getResultList();
+    }
 
 }

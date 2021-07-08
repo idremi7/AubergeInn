@@ -268,7 +268,24 @@ public class AubergeInn
                     Date dateFin = readDate(tokenizer);
                     //appel methode traitement pour la transaction
                     gestionAubergeInn.getGestionReservation().reserver(idClient, idChambre, dateDebut, dateFin);
-                } else
+                }
+                else if (command.equals("afficherCommodite"))
+                {
+                    List<TupleCommodite> commodites = gestionAubergeInn.getGestionCommodite().ListerTousCommodites();
+                    System.out.println();
+                    for (TupleCommodite commodite : commodites)
+                    {
+                        System.out.println(commodite.getIdCommodite() + " " + commodite.getDescription() + " " + commodite.getPrix());
+                    }
+                }
+                // *********************
+                // Commentaire : ligne débutant par --
+                // *********************
+                else if (command.equals("--"))
+                {
+                    // Ne rien faire, c'est un commentaire
+                }
+                else
                 {
                     System.out.println(" : Transaction non reconnue. Essayer \"aide\"");
                 }

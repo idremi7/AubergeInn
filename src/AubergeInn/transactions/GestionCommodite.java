@@ -11,6 +11,7 @@ import AubergeInn.tuples.TuplePossedeCommodite;
 
 import javax.persistence.Tuple;
 import java.sql.SQLException;
+import java.util.List;
 
 public class GestionCommodite
 {
@@ -89,7 +90,7 @@ public class GestionCommodite
      * exception est levée.
      */
     public void InclureCommodite(int idChambre, int idCommodite)
-            throws IFT287Exception, Exception
+            throws Exception
     {
         try
         {
@@ -98,11 +99,19 @@ public class GestionCommodite
             TupleCommodite c = commodite.getCommodite(idCommodite);
             TupleChambre ch = chambre.getChambre(idChambre);
 
+            if(c == null){
+                throw new IFT287Exception("la commodite : " + idCommodite +  "existe pas!");
+            }
+
+            if(ch == null){
+                throw new IFT287Exception("la chambre : " + idChambre +  "existe pas!");
+            }
+
 //            // Vérifie si la commodite existe déja
-            if (ch.getCommodites().contains(c))
+            if (ch.isCommoditeExiste(c))
                 throw new IFT287Exception("la commodite : " + idCommodite + "avec la chambre " + idChambre + "existe déjà!");
 
-            // Ajout d'une commoditeChambre dans la table possedeCommodite
+            // Ajout d'une commodite dans la liste de commodite d'une chambre
             ch.ajouteCommodite(c);
 
             // Commit
@@ -141,4 +150,20 @@ public class GestionCommodite
             throw e;
         }
     }
+
+    public List<TupleCommodite> ListerTousCommodites()
+    {
+        try
+        {
+            cx.demarreTransaction();
+            List<TupleCommodite> commodites = commodite.ListerCommodites();
+            cx.commit();
+            return commodites;
+        } catch (Exception e)
+        {
+            cx.rollback();
+            throw e;
+        }
+    }
+
 }

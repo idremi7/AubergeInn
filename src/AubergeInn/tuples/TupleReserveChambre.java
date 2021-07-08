@@ -29,6 +29,14 @@ public class TupleReserveChambre
         this.dateFin = dateFin;
     }
 
+    public TupleReserveChambre(TupleClient client, TupleChambre chambre, Date dateDebut, Date dateFin)
+    {
+        this.client = client;
+        this.chambre = chambre;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+    }
+
     public long getIdReservation()
     {
         return idReservation;

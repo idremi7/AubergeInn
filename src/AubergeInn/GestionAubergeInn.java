@@ -15,7 +15,7 @@ public class GestionAubergeInn
     private TableChambres chambre;
     private TableCommodites commodite;
     private TableReserveChambre reservation;
-//    private TablePossedeCommodite commoditeChambre;
+
     private GestionClient gestionClient;
     private GestionChambre gestionChambre;
     private GestionCommodite gestionCommodite;
@@ -39,13 +39,12 @@ public class GestionAubergeInn
         client = new TableClients(cx);
         chambre = new TableChambres(cx);
         commodite = new TableCommodites(cx);
-//        commoditeChambre = new TablePossedeCommodite(cx);
         reservation = new TableReserveChambre(cx);
-//
+
         setGestionClient(new GestionClient(client, reservation));
         setGestionChambre(new GestionChambre(chambre, reservation));
         setGestionCommodite(new GestionCommodite(commodite, chambre));
-        //setGestionReservation(new GestionReservation(chambre, client, reservation));
+        setGestionReservation(new GestionReservation(chambre, client, reservation));
     }
 
     public void fermer() throws SQLException
