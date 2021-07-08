@@ -100,19 +100,23 @@ public class GestionCommodite
             TupleChambre ch = chambre.getChambre(idChambre);
 
             if(c == null){
-                throw new IFT287Exception("la commodite : " + idCommodite +  "existe pas!");
+                throw new IFT287Exception("la commodite : " + idCommodite +  " existe pas!");
             }
 
             if(ch == null){
-                throw new IFT287Exception("la chambre : " + idChambre +  "existe pas!");
+                throw new IFT287Exception("la chambre : " + idChambre +  " existe pas!");
             }
 
-//            // Vérifie si la commodite existe déja
+            // Vérifie si la commodite existe déja
             if (ch.isCommoditeExiste(c))
-                throw new IFT287Exception("la commodite : " + idCommodite + "avec la chambre " + idChambre + "existe déjà!");
+                throw new IFT287Exception("la commodite : " + idCommodite + " avec la chambre " + idChambre + " existe déjà!");
 
             // Ajout d'une commodite dans la liste de commodite d'une chambre
-            ch.ajouteCommodite(c);
+            if(ch.ajouteCommodite(c)){
+                System.out.println("\nVous venez d'ajouter la commodite "+ idCommodite+ " a la chambre "+ idChambre);
+            }else{
+                throw new IFT287Exception("la commodite : " + idCommodite + " n'a pas été ajoutee");
+            }
 
             // Commit
             cx.commit();
@@ -136,8 +140,8 @@ public class GestionCommodite
             TupleCommodite c = commodite.getCommodite(idCommodite);
             TupleChambre ch = chambre.getChambre(idChambre);
 
-            if (!ch.getCommodites().contains(c))
-                throw new IFT287Exception("la commodite : " + idCommodite + "avec la chambre " + idChambre + "existe pas!");
+            if (!ch.isCommoditeExiste(c))
+                throw new IFT287Exception("la commodite : " + idCommodite + " avec la chambre " + idChambre + " existe pas!");
 
             // Suppression d'une commodite pour une chambre.
             ch.supprimerCommodite(c);

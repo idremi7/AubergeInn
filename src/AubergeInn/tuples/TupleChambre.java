@@ -95,9 +95,9 @@ public class TupleChambre
         return commodites.size();
     }
 
-    public void ajouteCommodite(TupleCommodite c)
+    public boolean ajouteCommodite(TupleCommodite c)
     {
-        commodites.add(c);
+        return commodites.add(c);
     }
 
     public void supprimerCommodite(TupleCommodite c)
