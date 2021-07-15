@@ -5,15 +5,23 @@ import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TupleReserveChambre;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class TableChambres
 {
+    private Connexion cx;
+    private MongoCollection<Document> chambresCollection;
+
     private final PreparedStatement stmtExiste;
     private final PreparedStatement stmtInsert;
     private final PreparedStatement stmtUpdate;
@@ -29,6 +37,8 @@ public class TableChambres
     public TableChambres(Connexion cx) throws SQLException
     {
         this.cx = cx;
+        chambresCollection = cx.getDatabase().getCollection("Chambres");
+
         this.stmtExiste = cx.getConnection().prepareStatement("select idchambre, nom, type, prixbase from chambre where idchambre = ?");
         this.stmtInsert = cx.getConnection().prepareStatement("insert into chambre (idchambre, nom, type, prixbase) "
                 + "values (?,?,?,?)");
@@ -78,13 +88,9 @@ public class TableChambres
     /**
      * Vérifie si une chambre existe.
      */
-    public boolean existe(int idChambre) throws SQLException
+    public boolean existe(int idChambre)
     {
-        stmtExiste.setInt(1, idChambre);
-        ResultSet rset = stmtExiste.executeQuery();
-        boolean chambreExiste = rset.next();
-        rset.close();
-        return chambreExiste;
+        return chambresCollection.find(eq("idChambre", idChambre)).first() != null;
     }
 
     /**
@@ -102,45 +108,34 @@ public class TableChambres
     /**
      * Lecture d'une chambre.
      */
-    public TupleChambre getChambre(int idChambre) throws SQLException
+    public TupleChambre getChambre(int idChambre)
     {
-        stmtExiste.setInt(1, idChambre);
-        ResultSet rset = stmtExiste.executeQuery();
-        if (rset.next())
+        Document l = chambresCollection.find(eq("idChambre", idChambre)).first();
+        if(l != null)
         {
-            TupleChambre tupleChambre = new TupleChambre();
-            tupleChambre.setIdChambre(idChambre);
-            tupleChambre.setNom(rset.getString(2));
-            tupleChambre.setType(rset.getString(3));
-            tupleChambre.setPrixBase(rset.getInt(4));
-
-            rset.close();
-            return tupleChambre;
-        } else
-            return null;
+            return new TupleChambre(l);
+        }
+        return null;
     }
 
     /**
      * Ajout d'une nouvelle chambre dans la base de données.
      */
-    public void ajouter(int idChambre, String nom, String type, float prixBase) throws SQLException
+    public void ajouter(int idChambre, String nom, String type, Float prixBase)
     {
-        /* Ajout d'une chambre. */
-        stmtInsert.setInt(1, idChambre);
-        stmtInsert.setString(2, nom);
-        stmtInsert.setString(3, type);
-        stmtInsert.setFloat(4, prixBase);
-        stmtInsert.executeUpdate();
+        TupleChambre l = new TupleChambre(idChambre, nom, type, prixBase);
+
+        // Ajout du livre.
+        chambresCollection.insertOne(l.toDocument());
     }
 
     /**
      * Suppression  d'une chambre.
      */
-    public int supprimer(int idChambre) throws SQLException
+    public boolean supprimer(int idChambre) throws SQLException
     {
         /* Suppression d'une chambre. */
-        stmtDelete.setInt(1, idChambre);
-        return stmtDelete.executeUpdate();
+        return chambresCollection.deleteOne(eq("idChambre", idChambre)).getDeletedCount() > 0;
     }
 
     /**

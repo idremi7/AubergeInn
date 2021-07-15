@@ -43,11 +43,8 @@ public class GestionChambre
             // Ajout d'une chambre dans la table des chambres
             chambre.ajouter(idChambre, nom, type, prixBase);
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
@@ -55,7 +52,7 @@ public class GestionChambre
     /**
      * Supprimer une chambre.
      */
-    public void supprimerChambre(int idChambre) throws SQLException, IFT287Exception, Exception
+    public void supprimerChambre(int idChambre) throws IFT287Exception, Exception
     {
         try
         {
@@ -65,15 +62,11 @@ public class GestionChambre
                 throw new IFT287Exception("Chambre inexistant: " + idChambre);
 
             // Suppression du chambre.
-            int nb = chambre.supprimer(idChambre);
-            if (nb == 0)
+            if (!chambre.supprimer(idChambre))
                 throw new IFT287Exception("Chambre " + idChambre + " inexistant");
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }

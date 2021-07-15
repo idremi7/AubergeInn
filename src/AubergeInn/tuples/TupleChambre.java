@@ -1,5 +1,7 @@
 package AubergeInn.tuples;
 
+import org.bson.Document;
+
 public class TupleChambre
 {
     private int idChambre;
@@ -9,6 +11,14 @@ public class TupleChambre
 
     public TupleChambre()
     {
+    }
+
+    public TupleChambre(Document d)
+    {
+        idChambre = d.getInteger("idChambre");
+        nom = d.getString("nom");
+        type = d.getString("type");
+        prixBase = d.getLong("prixBase");
     }
 
     public TupleChambre(int idChambre, String nom, String type, float prixBase)
@@ -57,5 +67,13 @@ public class TupleChambre
     public void setPrixBase(float prixBase)
     {
         this.prixBase = prixBase;
+    }
+
+    public Document toDocument()
+    {
+        return new Document().append("idChambre", idChambre)
+                .append("nom", nom)
+                .append("type", type)
+                .append("prixBase", prixBase);
     }
 }
