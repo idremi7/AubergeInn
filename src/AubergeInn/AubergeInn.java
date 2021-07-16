@@ -278,10 +278,6 @@ public class AubergeInn
         } catch (Exception e)
         {
             System.out.println(" " + e.toString());
-            // Ce rollback est ici seulement pour vous aider et éviter des problèmes lors de la correction
-            // automatique. En théorie, il ne sert à rien et ne devrait pas apparaître ici dans un programme
-            // fini et fonctionnel sans bogues.
-            gestionAubergeInn.rollback();
         }
     }
 

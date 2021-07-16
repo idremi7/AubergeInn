@@ -54,14 +54,6 @@ public class GestionAubergeInn
         cx.fermer();
     }
 
-    /**
-     * Rollback
-     */
-    public void rollback() throws SQLException
-    {
-        cx.rollback();
-    }
-
     public GestionClient getGestionClient()
     {
         return gestionClient;
