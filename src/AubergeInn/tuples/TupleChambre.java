@@ -18,7 +18,7 @@ public class TupleChambre
         idChambre = d.getInteger("idChambre");
         nom = d.getString("nom");
         type = d.getString("type");
-        prixBase = d.getLong("prixBase");
+        prixBase = Float.parseFloat(d.getString("prixBase"));
     }
 
     public TupleChambre(int idChambre, String nom, String type, float prixBase)

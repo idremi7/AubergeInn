@@ -6,12 +6,9 @@ package AubergeInn;
 
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleClient;
-import AubergeInn.tuples.TupleCommodite;
-import AubergeInn.tuples.TupleReserveChambre;
 
 import java.io.*;
 import java.sql.Date;
-import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -204,13 +201,13 @@ public class AubergeInn
                 // ********************************************************************************
                 else if (command.equals("afficherChambresLibres"))
                 {
-                    //appel methode traitement pour la transaction
-                    List<TupleChambre> listeChambres = gestionAubergeInn.getGestionChambre().ListerChambresLibres();
-                    System.out.println("\nid nom type prixLocation");
-                    for (TupleChambre chambre : listeChambres)
-                    {
-                        System.out.println(chambre.getIdChambre() + " " + chambre.getNom() + " " + chambre.getType() + " " + chambre.getPrixBase());
-                    }
+//                    //appel methode traitement pour la transaction
+//                    List<TupleChambre> listeChambres = gestionAubergeInn.getGestionChambre().ListerChambresLibres();
+//                    System.out.println("\nid nom type prixLocation");
+//                    for (TupleChambre chambre : listeChambres)
+//                    {
+//                        System.out.println(chambre.getIdChambre() + " " + chambre.getNom() + " " + chambre.getType() + " " + chambre.getPrixBase());
+//                    }
                 }
                 // *******************************************************************************
                 // afficherClient :
@@ -228,14 +225,14 @@ public class AubergeInn
                     System.out.println("\nidclient nom prenom age");
                     System.out.println(client.getIdClient() + " " + client.getNom() + " " + client.getPrenom() + " " + client.getAge());
 
-                    List<TupleReserveChambre> reserveChambres = gestionAubergeInn.getGestionReservation()
-                            .listerToutesReservationClient(idClient);
-                    System.out.println("\nRéservation:");
-                    System.out.println("\nid dateDebut dateFin prixTotal");
-                    for (TupleReserveChambre reserve : reserveChambres)
-                    {
-                        System.out.println(reserve.getIdReservation() + " " + reserve.getDateDebut() + " " + reserve.getDateFin() + " " + reserve.getPrixTotal());
-                    }
+//                    List<TupleReserveChambre> reserveChambres = gestionAubergeInn.getGestionReservation()
+//                            .listerToutesReservationClient(idClient);
+//                    System.out.println("\nRéservation:");
+//                    System.out.println("\nid dateDebut dateFin prixTotal");
+//                    for (TupleReserveChambre reserve : reserveChambres)
+//                    {
+//                        System.out.println(reserve.getIdReservation() + " " + reserve.getDateDebut() + " " + reserve.getDateFin() + " " + reserve.getPrixTotal());
+//                    }
                 }
                 // *******************************************************************************
                 // afficherChambre :
@@ -253,13 +250,13 @@ public class AubergeInn
                     System.out.println("\nidChambre Nom Type PrixBase");
                     System.out.println(chambre.getIdChambre() + " " + chambre.getNom() + " " + chambre.getType() + " " + chambre.getPrixBase());
 
-                    List<TupleCommodite> commodites = gestionAubergeInn.getGestionChambre().ListerCommodites(idChambre);
-                    System.out.print("\nCommoditées:");
-                    System.out.println("\nid description prix");
-                    for (TupleCommodite commodite : commodites)
-                    {
-                        System.out.println(commodite.getIdCommodite() + " " + commodite.getDescription() + " " + commodite.getPrix());
-                    }
+//                    List<TupleCommodite> commodites = gestionAubergeInn.getGestionChambre().ListerCommodites(idChambre);
+//                    System.out.print("\nCommoditées:");
+//                    System.out.println("\nid description prix");
+//                    for (TupleCommodite commodite : commodites)
+//                    {
+//                        System.out.println(commodite.getIdCommodite() + " " + commodite.getDescription() + " " + commodite.getPrix());
+//                    }
                 }
                 // ***********************
                 // reserver : Cette commande réserve une chambre pour un client.

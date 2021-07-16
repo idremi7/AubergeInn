@@ -1,5 +1,7 @@
 package AubergeInn.tuples;
 
+import org.bson.Document;
+
 public class TupleClient
 {
     private int idClient;
@@ -9,6 +11,14 @@ public class TupleClient
 
     public TupleClient()
     {
+    }
+
+    public TupleClient(Document d)
+    {
+        idClient = d.getInteger("idClient");
+        nom = d.getString("nom");
+        prenom = d.getString("prenom");
+        age = d.getInteger("age");
     }
 
     public TupleClient(int idClient, String nom, String prenom, int age)
@@ -57,6 +67,14 @@ public class TupleClient
     public void setAge(int age)
     {
         this.age = age;
+    }
+
+    public Document toDocument()
+    {
+        return new Document().append("idClient", idClient)
+                .append("nom", nom)
+                .append("prenom", prenom)
+                .append("age", age);
     }
 
     @Override

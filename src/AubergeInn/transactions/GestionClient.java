@@ -32,7 +32,7 @@ public class GestionClient
      * exception est levée.
      */
     public void ajouterClient(int idClient, String nom, String prenom, int age)
-            throws SQLException, IFT287Exception, Exception
+            throws IFT287Exception, Exception
     {
         try
         {
@@ -43,11 +43,8 @@ public class GestionClient
             // Ajout du livre dans la table des livres
             client.ajouter(idClient, nom, prenom, age);
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
@@ -55,7 +52,7 @@ public class GestionClient
     /**
      * Supprimer un client.
      */
-    public void supprimerClient(int idClient) throws SQLException, IFT287Exception, Exception
+    public void supprimerClient(int idClient) throws IFT287Exception, Exception
     {
         try
         {
@@ -68,15 +65,11 @@ public class GestionClient
                 throw new IFT287Exception("Client #" + idClient + " a une ou plusieurs réservations ");
 
             // Suppression du client.
-            int nb = client.supprimer(idClient);
-            if (nb == 0)
+            if (!client.supprimer(idClient))
                 throw new IFT287Exception("Client " + idClient + " inexistant");
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
@@ -84,17 +77,13 @@ public class GestionClient
     /**
      * Trouve toutes les informations sur un clients de la BD
      */
-    public TupleClient getClient(int idClient) throws SQLException
+    public TupleClient getClient(int idClient) throws IFT287Exception, Exception
     {
-
         try
         {
-            TupleClient unClient = client.getClient(idClient);
-            cx.commit();
-            return unClient;
+            return client.getClient(idClient);
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
 

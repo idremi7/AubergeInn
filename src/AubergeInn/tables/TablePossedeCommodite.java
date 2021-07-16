@@ -3,30 +3,38 @@ package AubergeInn.tables;
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleClient;
 import AubergeInn.tuples.TuplePossedeCommodite;
+import AubergeInn.tuples.TupleReserveChambre;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+
 public class TablePossedeCommodite
 {
-    private final PreparedStatement stmtExiste;
-    private final PreparedStatement stmtInsert;
-    private final PreparedStatement stmtUpdate;
-    private final PreparedStatement stmtDelete;
+//    private final PreparedStatement stmtExiste;
+//    private final PreparedStatement stmtInsert;
+//    private final PreparedStatement stmtUpdate;
+//    private final PreparedStatement stmtDelete;
 
     private final Connexion cx;
+    private MongoCollection<Document> possedeCommoditeCollection;
 
-    public TablePossedeCommodite(Connexion cx) throws SQLException
+    public TablePossedeCommodite(Connexion cx)
     {
         this.cx = cx;
-        this.stmtExiste = cx.getConnection().prepareStatement("select * from possedecommodite where idcommodite = ? and idchambre = ?");
-        this.stmtInsert = cx.getConnection()
-                .prepareStatement("insert into possedecommodite (idcommodite, idchambre) " + "values (?,?)");
-        this.stmtUpdate = cx.getConnection()
-                .prepareStatement("update possedecommodite " +
-                        "set idcommodite = ?, idchambre = ? " + "where idcommodite = ? and idchambre = ?");
-        this.stmtDelete = cx.getConnection().prepareStatement("delete from possedecommodite where idcommodite = ? and idchambre = ?");
+        possedeCommoditeCollection = cx.getDatabase().getCollection("PossedeCommodite");
+//        this.stmtExiste = cx.getConnection().prepareStatement("select * from possedecommodite where idcommodite = ? and idchambre = ?");
+//        this.stmtInsert = cx.getConnection()
+//                .prepareStatement("insert into possedecommodite (idcommodite, idchambre) " + "values (?,?)");
+//        this.stmtUpdate = cx.getConnection()
+//                .prepareStatement("update possedecommodite " +
+//                        "set idcommodite = ?, idchambre = ? " + "where idcommodite = ? and idchambre = ?");
+//        this.stmtDelete = cx.getConnection().prepareStatement("delete from possedecommodite where idcommodite = ? and idchambre = ?");
     }
 
     /**
@@ -42,53 +50,41 @@ public class TablePossedeCommodite
      */
     public boolean existe(int idCommodite, int idChambre) throws SQLException
     {
-        stmtExiste.setInt(1, idCommodite);
-        stmtExiste.setInt(2, idChambre);
-        ResultSet rset = stmtExiste.executeQuery();
-        boolean commoditeChambreExiste = rset.next();
-        rset.close();
-        return commoditeChambreExiste;
+        return possedeCommoditeCollection
+                .find(and(eq("idCommodite", idCommodite), eq("idChambre", idChambre))).first() != null;
     }
 
     /**
      * Lecture de la commodite d'une chambre
      */
-    public TuplePossedeCommodite getCommoditeChambre(int idCommodite, int idChambre) throws SQLException
+    public TuplePossedeCommodite getCommoditeChambre(int idCommodite, int idChambre)
     {
-        stmtExiste.setInt(1, idCommodite);
-        stmtExiste.setInt(2, idChambre);
-        ResultSet rset = stmtExiste.executeQuery();
-        if (rset.next())
+        Document p = possedeCommoditeCollection
+                .find(and(eq("idCommodite", idCommodite), eq("idChambre", idChambre))).first();
+        if(p != null)
         {
-            TuplePossedeCommodite tuplePossedeCommodite = new TuplePossedeCommodite();
-            tuplePossedeCommodite.setIdCommodite(idCommodite);
-            tuplePossedeCommodite.setIdChambre(idChambre);
-
-            rset.close();
-            return tuplePossedeCommodite;
-        } else
-            return null;
+            return new TuplePossedeCommodite(p);
+        }
+        return null;
     }
 
     /**
      * Ajout d'un lien commodite-chambre dans la base de données.
      */
-    public void ajouter(int idCommodite, int idChambre) throws SQLException
+    public void ajouter(int idCommodite, int idChambre)
     {
         /* Ajout d'une commodite-canard. */
-        stmtInsert.setInt(1, idCommodite);
-        stmtInsert.setInt(2, idChambre);
-        stmtInsert.executeUpdate();
+        TuplePossedeCommodite p = new TuplePossedeCommodite(idCommodite, idChambre);
+        possedeCommoditeCollection.insertOne(p.toDocument());
     }
 
     /**
      * Suppression d'un lien commodite-chambre dans la base de données.
      */
-    public int supprimer(int idCommodite, int idChambre) throws SQLException
+    public boolean supprimer(int idCommodite, int idChambre)
     {
         /* Suppression d'un commodite-chambre. */
-        stmtDelete.setInt(1, idCommodite);
-        stmtDelete.setInt(2, idChambre);
-        return stmtDelete.executeUpdate();
+        return possedeCommoditeCollection
+                .deleteOne(and(eq("idCommodite", idCommodite), eq("idChambre", idChambre))).getDeletedCount() > 0;
     }
 }

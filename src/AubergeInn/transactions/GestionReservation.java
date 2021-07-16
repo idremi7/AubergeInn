@@ -66,7 +66,7 @@ public class GestionReservation
             // Vérifier si la chambre existe dans les chambre libres
 //            if(!chambre.isChambreLibre(idChambre))
 //                throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
-            List<TupleReserveChambre> listReservation = chambre.listerReservations();
+            List<TupleReserveChambre> listReservation = reservation.listerReservations();
 
             for (TupleReserveChambre res : listReservation)
             {
@@ -83,31 +83,28 @@ public class GestionReservation
             // Creation de la reservation
             reservation.reserver(idClient, idChambre, dateDebut, dateFin);
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
 
-    /**
-     * Trouve tous les reservation avec prix total d'un client de la BD
-     */
-    public List<TupleReserveChambre> listerToutesReservationClient(int idClient) throws SQLException
-    {
-
-        try
-        {
-            List<TupleReserveChambre> reserveChambres = reservation.getReservationPrixClient(idClient);
-            cx.commit();
-            return reserveChambres;
-        } catch (Exception e)
-        {
-            cx.rollback();
-            throw e;
-        }
-
-    }
+//    /**
+//     * Trouve tous les reservation avec prix total d'un client de la BD
+//     */
+//    public List<TupleReserveChambre> listerToutesReservationClient(int idClient) throws SQLException
+//    {
+//
+//        try
+//        {
+//            List<TupleReserveChambre> reserveChambres = reservation.getReservationPrixClient(idClient);
+//            cx.commit();
+//            return reserveChambres;
+//        } catch (Exception e)
+//        {
+//            cx.rollback();
+//            throw e;
+//        }
+//
+//    }
 }

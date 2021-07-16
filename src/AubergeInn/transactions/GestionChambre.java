@@ -14,15 +14,13 @@ public class GestionChambre
 {
     private TableChambres chambre;
     private TableCommodites commodite;
-    private Connexion cx;
 
     /**
      * Creation d'une instance
      */
     public GestionChambre(TableChambres chambre) throws IFT287Exception
     {
-        this.cx = chambre.getConnexion();
-//        if (chambre.getConnexion() != reservation.getConnexion())
+//        if (chambre.getConnexion() != commodite.getConnexion())
 //            throw new IFT287Exception("Les instances de chambre et de reservation n'utilisent pas la même connexion au serveur");
         this.chambre = chambre;
     }
@@ -74,47 +72,30 @@ public class GestionChambre
     /**
      * Cette commande obtiens une chambre
      */
-    public TupleChambre getChambre(int idChambre) throws SQLException
+    public TupleChambre getChambre(int idChambre)
     {
         try
         {
-            TupleChambre uneChambre = chambre.getChambre(idChambre);
-            cx.commit();
-            return uneChambre;
+            return chambre.getChambre(idChambre);
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
 
     }
 
-    public List<TupleCommodite> ListerCommodites(int idChambre) throws SQLException
-    {
-        try
-        {
-            List<TupleCommodite> commodites = chambre.listerCommodites(idChambre);
-            cx.commit();
-            return commodites;
-        } catch (Exception e)
-        {
-            cx.rollback();
-            throw e;
-        }
-    }
-
-    public List<TupleChambre> ListerChambresLibres() throws SQLException
-    {
-        try
-        {
-            List<TupleChambre> chambres = chambre.listerChambresLibres();
-            cx.commit();
-            return chambres;
-        } catch (Exception e)
-        {
-            cx.rollback();
-            throw e;
-        }
-    }
+//    public List<TupleChambre> ListerChambresLibres() throws SQLException
+//    {
+//        try
+//        {
+//            List<TupleChambre> chambres = chambre.listerChambresLibres();
+//            cx.commit();
+//            return chambres;
+//        } catch (Exception e)
+//        {
+//            cx.rollback();
+//            throw e;
+//        }
+//    }
 
 }

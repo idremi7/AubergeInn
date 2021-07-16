@@ -8,21 +8,18 @@ import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TuplePossedeCommodite;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class GestionCommodite
 {
     private TableCommodites commodite;
     private TablePossedeCommodite commoditeChambre;
-    private Connexion cx;
 
     /**
      * Creation d'une instance
      */
     public GestionCommodite(TableCommodites commodite, TablePossedeCommodite commoditeChambre) throws IFT287Exception
     {
-        this.cx = commodite.getConnexion();
-        this.cx = commoditeChambre.getConnexion();
-
         if (commodite.getConnexion() != commoditeChambre.getConnexion())
             throw new IFT287Exception("Les instances de commodite et de commoditeChambre n'utilisent pas la même connexion au serveur");
         this.commodite = commodite;
@@ -45,11 +42,8 @@ public class GestionCommodite
             // Ajout d'une commodite dans la table des commodite
             commodite.ajouter(idCommodite, description, prix);
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
@@ -57,7 +51,7 @@ public class GestionCommodite
     /**
      * Supprimer une commodite de la bd (pour tester seulement) non necessaire pour le programme.
      */
-    public void supprimerCommodite(int idCommodite) throws SQLException, IFT287Exception, Exception
+    public void supprimerCommodite(int idCommodite) throws IFT287Exception, Exception
     {
         try
         {
@@ -66,19 +60,15 @@ public class GestionCommodite
             if (tupleCommodite == null)
                 throw new IFT287Exception("Client inexistant: " + idCommodite);
 
-//            if (possedeCommodite.getCommodite(idCommodite) != null)
+//            if (commoditeChambre.getCommodite(idCommodite) != null)
 //                throw new IFT287Exception("Commodite #" + idCommodite + " est lié a une ou plusieurs chambres");
 
             // Suppression d'une commodite.
-            int nb = commodite.supprimer(idCommodite);
-            if (nb == 0)
+            if (!commodite.supprimer(idCommodite))
                 throw new IFT287Exception("Commodite " + idCommodite + " inexistant");
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
@@ -88,7 +78,7 @@ public class GestionCommodite
      * exception est levée.
      */
     public void InclureCommodite(int idChambre, int idCommodite)
-            throws SQLException, IFT287Exception, Exception
+            throws IFT287Exception, Exception
     {
         try
         {
@@ -99,11 +89,8 @@ public class GestionCommodite
             // Ajout d'une commoditeChambre dans la table possedeCommodite
             commoditeChambre.ajouter(idCommodite, idChambre);
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
@@ -111,7 +98,7 @@ public class GestionCommodite
     /**
      * Enlever une commoditer d'une chambre
      */
-    public void enleverCommodite(int idChambre, int idCommodite) throws SQLException, IFT287Exception, Exception
+    public void enleverCommodite(int idChambre, int idCommodite) throws IFT287Exception, Exception
     {
         try
         {
@@ -121,16 +108,27 @@ public class GestionCommodite
                 throw new IFT287Exception("Lien inexistant pour la commodite: " + idCommodite + " et la chambre: " + idChambre);
 
             // Suppression d'une commodite pour une chambre.
-            int nb = commoditeChambre.supprimer(idCommodite, idChambre);
-            if (nb == 0)
+            if (!commoditeChambre.supprimer(idCommodite, idChambre))
                 throw new IFT287Exception("Lien Commodite-Chambre " + idCommodite + "-" + idChambre + " inexistant");
 
-            // Commit
-            cx.commit();
         } catch (Exception e)
         {
-            cx.rollback();
             throw e;
         }
     }
+
+//    public List<TupleCommodite> ListerCommodites(int idChambre)
+//    {
+//        try
+//        {
+//            List<TupleCommodite> commodites = commodite.listerCommodites(idChambre);
+//            cx.commit();
+//            return commodites;
+//        } catch (Exception e)
+//        {
+//            cx.rollback();
+//            throw e;
+//        }
+//    }
+
 }

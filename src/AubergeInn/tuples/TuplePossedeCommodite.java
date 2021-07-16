@@ -1,5 +1,7 @@
 package AubergeInn.tuples;
 
+import org.bson.Document;
+
 public class TuplePossedeCommodite
 {
     private int idCommodite;
@@ -7,6 +9,12 @@ public class TuplePossedeCommodite
 
     public TuplePossedeCommodite()
     {
+    }
+
+    public TuplePossedeCommodite(Document d)
+    {
+        this.idCommodite = d.getInteger("idClient");
+        this.idChambre = d.getInteger("idChambre");
     }
 
     public TuplePossedeCommodite(int idCommodite, int idChambre)
@@ -33,5 +41,11 @@ public class TuplePossedeCommodite
     public void setIdChambre(int idChambre)
     {
         this.idChambre = idChambre;
+    }
+
+    public Document toDocument()
+    {
+        return new Document().append("idCommodite", idCommodite)
+                .append("idChambre", idChambre);
     }
 }

@@ -1,5 +1,7 @@
 package AubergeInn.tuples;
 
+import org.bson.Document;
+
 public class TupleCommodite
 {
     private int idCommodite;
@@ -8,6 +10,13 @@ public class TupleCommodite
 
     public TupleCommodite()
     {
+    }
+
+    public TupleCommodite(Document d)
+    {
+        idCommodite = d.getInteger("idChambre");
+        description = d.getString("nom");
+        prix = Float.parseFloat(d.getString("prixBase"));
     }
 
     public TupleCommodite(int idCommodite, String description, float prix)
@@ -45,5 +54,12 @@ public class TupleCommodite
     public void setPrix(float prix)
     {
         this.prix = prix;
+    }
+
+    public Document toDocument()
+    {
+        return new Document().append("idCommodite", idCommodite)
+                .append("description", description)
+                .append("prix", prix);
     }
 }
