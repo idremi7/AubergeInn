@@ -40,7 +40,7 @@ public class GestionReservation
      * Réservation d'une chambre par un client. La chambre doit être libre.
      */
     public void reserver(int idChambre, int idClient, Date dateDebut, Date dateFin)
-            throws SQLException, IFT287Exception, Exception
+            throws IFT287Exception, Exception
     {
         try
         {
