@@ -43,7 +43,7 @@ public class GestionAubergeInn
         reservation = new TableReserveChambre(cx);
 
         setGestionClient(new GestionClient(client, reservation));
-        setGestionChambre(new GestionChambre(chambre));
+        setGestionChambre(new GestionChambre(chambre, reservation, commodite, commoditeChambre));
         setGestionCommodite(new GestionCommodite(commodite, commoditeChambre));
         setGestionReservation(new GestionReservation(chambre, client, reservation));
     }

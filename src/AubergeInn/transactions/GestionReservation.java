@@ -39,7 +39,7 @@ public class GestionReservation
     /**
      * Réservation d'une chambre par un client. La chambre doit être libre.
      */
-    public void reserver(int idChambre, int idClient, Date dateDebut, Date dateFin)
+    public void reserver(int idClient, int idChambre, Date dateDebut, Date dateFin)
             throws IFT287Exception, Exception
     {
         try
@@ -89,22 +89,19 @@ public class GestionReservation
         }
     }
 
-//    /**
-//     * Trouve tous les reservation avec prix total d'un client de la BD
-//     */
-//    public List<TupleReserveChambre> listerToutesReservationClient(int idClient) throws SQLException
-//    {
-//
-//        try
-//        {
-//            List<TupleReserveChambre> reserveChambres = reservation.getReservationPrixClient(idClient);
-//            cx.commit();
-//            return reserveChambres;
-//        } catch (Exception e)
-//        {
-//            cx.rollback();
-//            throw e;
-//        }
-//
-//    }
+    /**
+     * Trouve tous les reservation avec prix total d'un client de la BD
+     */
+    public List<TupleReserveChambre> listerToutesReservationClient(int idClient)
+    {
+
+        try
+        {
+            return reservation.calculerlisteReservationsClient(idClient);
+        } catch (Exception e)
+        {
+            throw e;
+        }
+
+    }
 }

@@ -1,28 +1,41 @@
 package AubergeInn.transactions;
 
 
-import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
 import AubergeInn.tables.TableChambres;
 import AubergeInn.tables.TableCommodites;
-import AubergeInn.tuples.*;
+import AubergeInn.tables.TablePossedeCommodite;
+import AubergeInn.tables.TableReserveChambre;
+import AubergeInn.tuples.TupleChambre;
+import AubergeInn.tuples.TupleCommodite;
+import AubergeInn.tuples.TuplePossedeCommodite;
+import AubergeInn.tuples.TupleReserveChambre;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GestionChambre
 {
     private TableChambres chambre;
     private TableCommodites commodite;
+    private TablePossedeCommodite commoditeChambre;
+    private TableReserveChambre reservation;
 
     /**
      * Creation d'une instance
      */
-    public GestionChambre(TableChambres chambre) throws IFT287Exception
+    public GestionChambre(TableChambres chambre, TableReserveChambre reservation, TableCommodites commodite, TablePossedeCommodite commoditeChambre) throws IFT287Exception
     {
-//        if (chambre.getConnexion() != commodite.getConnexion())
-//            throw new IFT287Exception("Les instances de chambre et de reservation n'utilisent pas la même connexion au serveur");
+        if (chambre.getConnexion() != reservation.getConnexion() || reservation.getConnexion() != commodite.getConnexion() ||
+                commodite.getConnexion() != commoditeChambre.getConnexion())
+            throw new IFT287Exception("Les instances de chambre et de reservation n'utilisent pas la même connexion au serveur");
         this.chambre = chambre;
+        this.reservation = reservation;
+        this.commodite = commodite;
+        this.commoditeChambre = commoditeChambre;
     }
 
     /**
@@ -84,18 +97,42 @@ public class GestionChambre
 
     }
 
-//    public List<TupleChambre> ListerChambresLibres() throws SQLException
-//    {
-//        try
-//        {
-//            List<TupleChambre> chambres = chambre.listerChambresLibres();
-//            cx.commit();
-//            return chambres;
-//        } catch (Exception e)
-//        {
-//            cx.rollback();
-//            throw e;
-//        }
-//    }
+    /**
+     * Trouve toutes les chambres libre
+     */
+    public List<TupleChambre> listerChambresLibre()
+    {
+        List<TupleChambre> listeChambreLibre = new ArrayList<>();
+        List<TupleChambre> listeChambre = chambre.calculerListeChambre();
 
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+
+        for (TupleChambre ch : listeChambre)
+        {
+            TupleReserveChambre r = reservation.getReservationChambre(ch.getIdChambre());
+            if (r == null || r.getDateDebut().compareTo(calendar.getTime()) * calendar.getTime().compareTo(r.getDateFin()) >= 0)
+            {
+                listeChambreLibre.add(ch);
+            }
+        }
+
+        return listeChambreLibre;
+    }
+
+    public double calculerPrixLocation(int idChambre){
+
+        TupleChambre uneChambre = chambre.getChambre(idChambre);
+        double prixtotal = uneChambre.getPrixBase();
+
+        List<TuplePossedeCommodite> listePossedeCommodite = commoditeChambre.listerCommoditeChambre(idChambre);
+
+        for (TuplePossedeCommodite p : listePossedeCommodite)
+        {
+            TupleCommodite c = commodite.getCommodite(p.getIdCommodite());
+            prixtotal += c.getPrix();
+        }
+
+        return  prixtotal;
+    }
 }

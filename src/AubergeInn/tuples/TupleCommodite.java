@@ -6,7 +6,7 @@ public class TupleCommodite
 {
     private int idCommodite;
     private String description;
-    private float prix;
+    private double prix;
 
     public TupleCommodite()
     {
@@ -14,9 +14,9 @@ public class TupleCommodite
 
     public TupleCommodite(Document d)
     {
-        idCommodite = d.getInteger("idChambre");
-        description = d.getString("nom");
-        prix = Float.parseFloat(d.getString("prixBase"));
+        idCommodite = d.getInteger("idCommodite");
+        description = d.getString("description");
+        prix = d.getDouble("prix");
     }
 
     public TupleCommodite(int idCommodite, String description, float prix)
@@ -46,7 +46,7 @@ public class TupleCommodite
         this.description = description;
     }
 
-    public float getPrix()
+    public double getPrix()
     {
         return prix;
     }

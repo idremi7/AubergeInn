@@ -6,9 +6,6 @@ import AubergeInn.tables.TableClients;
 import AubergeInn.tables.TableReserveChambre;
 import AubergeInn.tuples.TupleClient;
 
-import java.sql.SQLException;
-import java.util.List;
-
 public class GestionClient
 {
     private TableClients client;

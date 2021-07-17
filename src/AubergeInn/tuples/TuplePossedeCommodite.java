@@ -13,7 +13,7 @@ public class TuplePossedeCommodite
 
     public TuplePossedeCommodite(Document d)
     {
-        this.idCommodite = d.getInteger("idClient");
+        this.idCommodite = d.getInteger("idCommodite");
         this.idChambre = d.getInteger("idChambre");
     }
 

@@ -1,40 +1,27 @@
 package AubergeInn.tables;
 
 import AubergeInn.Connexion;
-import AubergeInn.tuples.TupleClient;
 import AubergeInn.tuples.TuplePossedeCommodite;
-import AubergeInn.tuples.TupleReserveChambre;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 public class TablePossedeCommodite
 {
-//    private final PreparedStatement stmtExiste;
-//    private final PreparedStatement stmtInsert;
-//    private final PreparedStatement stmtUpdate;
-//    private final PreparedStatement stmtDelete;
-
     private final Connexion cx;
-    private MongoCollection<Document> possedeCommoditeCollection;
+    private final MongoCollection<Document> possedeCommoditeCollection;
 
     public TablePossedeCommodite(Connexion cx)
     {
         this.cx = cx;
         possedeCommoditeCollection = cx.getDatabase().getCollection("PossedeCommodite");
-//        this.stmtExiste = cx.getConnection().prepareStatement("select * from possedecommodite where idcommodite = ? and idchambre = ?");
-//        this.stmtInsert = cx.getConnection()
-//                .prepareStatement("insert into possedecommodite (idcommodite, idchambre) " + "values (?,?)");
-//        this.stmtUpdate = cx.getConnection()
-//                .prepareStatement("update possedecommodite " +
-//                        "set idcommodite = ?, idchambre = ? " + "where idcommodite = ? and idchambre = ?");
-//        this.stmtDelete = cx.getConnection().prepareStatement("delete from possedecommodite where idcommodite = ? and idchambre = ?");
     }
 
     /**
@@ -55,20 +42,6 @@ public class TablePossedeCommodite
     }
 
     /**
-     * Lecture de la commodite d'une chambre
-     */
-    public TuplePossedeCommodite getCommoditeChambre(int idCommodite, int idChambre)
-    {
-        Document p = possedeCommoditeCollection
-                .find(and(eq("idCommodite", idCommodite), eq("idChambre", idChambre))).first();
-        if(p != null)
-        {
-            return new TuplePossedeCommodite(p);
-        }
-        return null;
-    }
-
-    /**
      * Ajout d'un lien commodite-chambre dans la base de données.
      */
     public void ajouter(int idCommodite, int idChambre)
@@ -86,5 +59,55 @@ public class TablePossedeCommodite
         /* Suppression d'un commodite-chambre. */
         return possedeCommoditeCollection
                 .deleteOne(and(eq("idCommodite", idCommodite), eq("idChambre", idChambre))).getDeletedCount() > 0;
+    }
+
+    /**
+     * Lecture de la commodite d'une chambre
+     */
+    public TuplePossedeCommodite getCommoditeChambre(int idCommodite, int idChambre)
+    {
+        Document p = possedeCommoditeCollection
+                .find(and(eq("idCommodite", idCommodite), eq("idChambre", idChambre))).first();
+        if(p != null)
+        {
+            return new TuplePossedeCommodite(p);
+        }
+        return null;
+    }
+
+    /**
+     * Lecture d'un lien commodite-chambre avec un idCommodite
+     */
+    public TuplePossedeCommodite getCommoditeChambre(int idCommodite)
+    {
+        Document p = possedeCommoditeCollection
+                .find(and(eq("idCommodite", idCommodite))).first();
+        if(p != null)
+        {
+            return new TuplePossedeCommodite(p);
+        }
+        return null;
+    }
+
+    /**
+     * Liste toute les réservations
+     */
+    public List<TuplePossedeCommodite> listerCommoditeChambre(int idChambre)
+    {
+        List<TuplePossedeCommodite> liste = new LinkedList<>();
+        MongoCursor<Document> commoditeChambre = possedeCommoditeCollection.find(eq("idChambre", idChambre)).iterator();
+        try
+        {
+            while (commoditeChambre.hasNext())
+            {
+                liste.add(new TuplePossedeCommodite(commoditeChambre.next()));
+            }
+        }
+        finally
+        {
+            commoditeChambre.close();
+        }
+
+        return liste;
     }
 }

@@ -2,12 +2,18 @@ package AubergeInn.transactions;
 
 import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
+import AubergeInn.tables.TableChambres;
 import AubergeInn.tables.TableCommodites;
 import AubergeInn.tables.TablePossedeCommodite;
+import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TuplePossedeCommodite;
+import AubergeInn.tuples.TupleReserveChambre;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GestionCommodite
@@ -31,7 +37,7 @@ public class GestionCommodite
      * exception est levée.
      */
     public void ajouterCommodite(int idCommodite, String description, float prix)
-            throws SQLException, IFT287Exception, Exception
+            throws IFT287Exception, Exception
     {
         try
         {
@@ -41,31 +47,6 @@ public class GestionCommodite
 
             // Ajout d'une commodite dans la table des commodite
             commodite.ajouter(idCommodite, description, prix);
-
-        } catch (Exception e)
-        {
-            throw e;
-        }
-    }
-
-    /**
-     * Supprimer une commodite de la bd (pour tester seulement) non necessaire pour le programme.
-     */
-    public void supprimerCommodite(int idCommodite) throws IFT287Exception, Exception
-    {
-        try
-        {
-            // Validation
-            TupleCommodite tupleCommodite = commodite.getCommodite(idCommodite);
-            if (tupleCommodite == null)
-                throw new IFT287Exception("Client inexistant: " + idCommodite);
-
-//            if (commoditeChambre.getCommodite(idCommodite) != null)
-//                throw new IFT287Exception("Commodite #" + idCommodite + " est lié a une ou plusieurs chambres");
-
-            // Suppression d'une commodite.
-            if (!commodite.supprimer(idCommodite))
-                throw new IFT287Exception("Commodite " + idCommodite + " inexistant");
 
         } catch (Exception e)
         {
@@ -117,18 +98,21 @@ public class GestionCommodite
         }
     }
 
-//    public List<TupleCommodite> ListerCommodites(int idChambre)
-//    {
-//        try
-//        {
-//            List<TupleCommodite> commodites = commodite.listerCommodites(idChambre);
-//            cx.commit();
-//            return commodites;
-//        } catch (Exception e)
-//        {
-//            cx.rollback();
-//            throw e;
-//        }
-//    }
+    /**
+     * Trouve toutes les commodites d'une chambre
+     */
+    public List<TupleCommodite> calculerListeCommodites(int idChambre)
+    {
+        List<TupleCommodite> liste = new ArrayList<>();
+        List<TuplePossedeCommodite> listePossedeCommodite = commoditeChambre.listerCommoditeChambre(idChambre);
+
+        for (TuplePossedeCommodite p : listePossedeCommodite)
+        {
+            TupleCommodite c = commodite.getCommodite(p.getIdCommodite());
+            liste.add(c);
+        }
+
+        return liste;
+    }
 
 }
