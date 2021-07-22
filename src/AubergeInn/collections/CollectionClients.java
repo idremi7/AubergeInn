@@ -1,25 +1,20 @@
-package AubergeInn.tables;
+package AubergeInn.collections;
 
 import AubergeInn.Connexion;
-import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleClient;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class TableClients
+public class CollectionClients
 {
     private final Connexion cx;
     private MongoCollection<Document> clientsCollection;
 
-    public TableClients(Connexion cx)
+    public CollectionClients(Connexion cx)
     {
         this.cx = cx;
         clientsCollection = cx.getDatabase().getCollection("Client");

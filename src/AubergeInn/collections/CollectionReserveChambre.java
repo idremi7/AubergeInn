@@ -1,4 +1,4 @@
-package AubergeInn.tables;
+package AubergeInn.collections;
 
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleReserveChambre;
@@ -14,12 +14,12 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-public class TableReserveChambre
+public class CollectionReserveChambre
 {
     private MongoCollection<Document> reservationsCollection;
     private Connexion cx;
 
-    public TableReserveChambre(Connexion cx) throws SQLException
+    public CollectionReserveChambre(Connexion cx) throws SQLException
     {
         this.cx = cx;
         reservationsCollection = cx.getDatabase().getCollection("ReserveChambre");

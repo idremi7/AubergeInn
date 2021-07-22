@@ -1,4 +1,4 @@
-package AubergeInn.tables;
+package AubergeInn.collections;
 
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleChambre;
@@ -11,12 +11,12 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class TableChambres
+public class CollectionChambres
 {
     private Connexion cx;
     private MongoCollection<Document> chambresCollection;
 
-    public TableChambres(Connexion cx)
+    public CollectionChambres(Connexion cx)
     {
         this.cx = cx;
         chambresCollection = cx.getDatabase().getCollection("Chambre");

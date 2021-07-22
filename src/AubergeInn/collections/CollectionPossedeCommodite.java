@@ -1,4 +1,4 @@
-package AubergeInn.tables;
+package AubergeInn.collections;
 
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TuplePossedeCommodite;
@@ -13,12 +13,12 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-public class TablePossedeCommodite
+public class CollectionPossedeCommodite
 {
     private final Connexion cx;
     private final MongoCollection<Document> possedeCommoditeCollection;
 
-    public TablePossedeCommodite(Connexion cx)
+    public CollectionPossedeCommodite(Connexion cx)
     {
         this.cx = cx;
         possedeCommoditeCollection = cx.getDatabase().getCollection("PossedeCommodite");

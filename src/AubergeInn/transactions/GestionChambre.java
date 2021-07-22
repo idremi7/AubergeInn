@@ -2,10 +2,10 @@ package AubergeInn.transactions;
 
 
 import AubergeInn.IFT287Exception;
-import AubergeInn.tables.TableChambres;
-import AubergeInn.tables.TableCommodites;
-import AubergeInn.tables.TablePossedeCommodite;
-import AubergeInn.tables.TableReserveChambre;
+import AubergeInn.collections.CollectionChambres;
+import AubergeInn.collections.CollectionCommodites;
+import AubergeInn.collections.CollectionPossedeCommodite;
+import AubergeInn.collections.CollectionReserveChambre;
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TuplePossedeCommodite;
@@ -19,15 +19,15 @@ import java.util.List;
 
 public class GestionChambre
 {
-    private TableChambres chambre;
-    private TableCommodites commodite;
-    private TablePossedeCommodite commoditeChambre;
-    private TableReserveChambre reservation;
+    private CollectionChambres chambre;
+    private CollectionCommodites commodite;
+    private CollectionPossedeCommodite commoditeChambre;
+    private CollectionReserveChambre reservation;
 
     /**
      * Creation d'une instance
      */
-    public GestionChambre(TableChambres chambre, TableReserveChambre reservation, TableCommodites commodite, TablePossedeCommodite commoditeChambre) throws IFT287Exception
+    public GestionChambre(CollectionChambres chambre, CollectionReserveChambre reservation, CollectionCommodites commodite, CollectionPossedeCommodite commoditeChambre) throws IFT287Exception
     {
         if (chambre.getConnexion() != reservation.getConnexion() || reservation.getConnexion() != commodite.getConnexion() ||
                 commodite.getConnexion() != commoditeChambre.getConnexion())

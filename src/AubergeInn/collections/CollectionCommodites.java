@@ -1,4 +1,4 @@
-package AubergeInn.tables;
+package AubergeInn.collections;
 
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleCommodite;
@@ -7,12 +7,12 @@ import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class TableCommodites
+public class CollectionCommodites
 {
     private final Connexion cx;
     private MongoCollection<Document> commoditesCollection;
 
-    public TableCommodites(Connexion cx)
+    public CollectionCommodites(Connexion cx)
     {
         this.cx = cx;
         commoditesCollection = cx.getDatabase().getCollection("Commodite");

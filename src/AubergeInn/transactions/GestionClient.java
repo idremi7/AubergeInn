@@ -2,20 +2,20 @@ package AubergeInn.transactions;
 
 import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
-import AubergeInn.tables.TableClients;
-import AubergeInn.tables.TableReserveChambre;
+import AubergeInn.collections.CollectionClients;
+import AubergeInn.collections.CollectionReserveChambre;
 import AubergeInn.tuples.TupleClient;
 
 public class GestionClient
 {
-    private TableClients client;
-    private TableReserveChambre reservation;
+    private CollectionClients client;
+    private CollectionReserveChambre reservation;
     private Connexion cx;
 
     /**
      * Creation d'une instance
      */
-    public GestionClient(TableClients client, TableReserveChambre reservation) throws IFT287Exception
+    public GestionClient(CollectionClients client, CollectionReserveChambre reservation) throws IFT287Exception
     {
         this.cx = client.getConnexion();
         if (client.getConnexion() != reservation.getConnexion())

@@ -2,22 +2,21 @@ package AubergeInn.transactions;
 
 import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
-import AubergeInn.tables.TableChambres;
-import AubergeInn.tables.TableClients;
-import AubergeInn.tables.TableReserveChambre;
+import AubergeInn.collections.CollectionChambres;
+import AubergeInn.collections.CollectionClients;
+import AubergeInn.collections.CollectionReserveChambre;
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleClient;
 import AubergeInn.tuples.TupleReserveChambre;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.List;
 
 public class GestionReservation
 {
-    private TableChambres chambre;
-    private TableClients client;
-    private TableReserveChambre reservation;
+    private CollectionChambres chambre;
+    private CollectionClients client;
+    private CollectionReserveChambre reservation;
     private Connexion cx;
 
     /**
@@ -25,7 +24,7 @@ public class GestionReservation
      * membre doit être la même que cx, afin d'assurer l'intégrité des
      * transactions.
      */
-    public GestionReservation(TableChambres chambre, TableClients client, TableReserveChambre reservation) throws IFT287Exception
+    public GestionReservation(CollectionChambres chambre, CollectionClients client, CollectionReserveChambre reservation) throws IFT287Exception
     {
         if (chambre.getConnexion() != client.getConnexion() || reservation.getConnexion() != client.getConnexion())
             throw new IFT287Exception(

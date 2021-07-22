@@ -1,6 +1,6 @@
 package AubergeInn;
 
-import AubergeInn.tables.*;
+import AubergeInn.collections.*;
 import AubergeInn.transactions.GestionChambre;
 import AubergeInn.transactions.GestionClient;
 import AubergeInn.transactions.GestionCommodite;
@@ -11,11 +11,11 @@ import java.sql.SQLException;
 public class GestionAubergeInn
 {
     private Connexion cx;
-    private TableClients client;
-    private TableChambres chambre;
-    private TableCommodites commodite;
-    private TableReserveChambre reservation;
-    private TablePossedeCommodite commoditeChambre;
+    private CollectionClients client;
+    private CollectionChambres chambre;
+    private CollectionCommodites commodite;
+    private CollectionReserveChambre reservation;
+    private CollectionPossedeCommodite commoditeChambre;
     private GestionClient gestionClient;
     private GestionChambre gestionChambre;
     private GestionCommodite gestionCommodite;
@@ -36,11 +36,11 @@ public class GestionAubergeInn
         // Allocation des objets pour le traitement des transactions
         cx = new Connexion(serveur, bd, user, password);
 
-        client = new TableClients(cx);
-        chambre = new TableChambres(cx);
-        commodite = new TableCommodites(cx);
-        commoditeChambre = new TablePossedeCommodite(cx);
-        reservation = new TableReserveChambre(cx);
+        client = new CollectionClients(cx);
+        chambre = new CollectionChambres(cx);
+        commodite = new CollectionCommodites(cx);
+        commoditeChambre = new CollectionPossedeCommodite(cx);
+        reservation = new CollectionReserveChambre(cx);
 
         setGestionClient(new GestionClient(client, reservation));
         setGestionChambre(new GestionChambre(chambre, reservation, commodite, commoditeChambre));

@@ -1,30 +1,23 @@
 package AubergeInn.transactions;
 
-import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
-import AubergeInn.tables.TableChambres;
-import AubergeInn.tables.TableCommodites;
-import AubergeInn.tables.TablePossedeCommodite;
-import AubergeInn.tuples.TupleChambre;
+import AubergeInn.collections.CollectionCommodites;
+import AubergeInn.collections.CollectionPossedeCommodite;
 import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TuplePossedeCommodite;
-import AubergeInn.tuples.TupleReserveChambre;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GestionCommodite
 {
-    private TableCommodites commodite;
-    private TablePossedeCommodite commoditeChambre;
+    private CollectionCommodites commodite;
+    private CollectionPossedeCommodite commoditeChambre;
 
     /**
      * Creation d'une instance
      */
-    public GestionCommodite(TableCommodites commodite, TablePossedeCommodite commoditeChambre) throws IFT287Exception
+    public GestionCommodite(CollectionCommodites commodite, CollectionPossedeCommodite commoditeChambre) throws IFT287Exception
     {
         if (commodite.getConnexion() != commoditeChambre.getConnexion())
             throw new IFT287Exception("Les instances de commodite et de commoditeChambre n'utilisent pas la même connexion au serveur");
