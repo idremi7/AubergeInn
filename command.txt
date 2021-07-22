@@ -1,0 +1,21 @@
+ajouterClient 1 John Smith 25
+ajouterClient 2 Harry Potter 12
+ajouterClient 3 Ron Weasley 12
+ajouterClient 4 Drago Malfois 12
+supprimerClient 1
+ajouterChambre 1 LaCarotte Double 75
+ajouterChambre 2 LaBetterave Queen 90
+ajouterChambre 3 LaBetteACarde King 120
+ajouterChambre 4 LePoisChiche Simple 60
+ajouterChambre 5 LaFeve Double 75
+supprimerChambre 4
+ajouterCommodite 1 MiniBar 10
+ajouterCommodite 2 Tele 15
+ajouterCommodite 3 SalleDeBain 25
+inclureCommodite 1 2
+inclureCommodite 3 3
+inclureCommodite 2 2
+inclureCommodite 3 2
+enleverCommodite 3 3
+reserver 2 3 2021-07-18 2021-07-20
+reserver 4 5 2021-10-02 2025-10-15
