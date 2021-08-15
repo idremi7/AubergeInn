@@ -78,8 +78,7 @@ public class AubergeInn
             }
         } finally
         {
-            if (aubergeInnInstance != null)
-                aubergeInnInstance.fermer();
+            if (aubergeInnInstance != null) aubergeInnInstance.fermer();
         }
 
     }
@@ -223,8 +222,7 @@ public class AubergeInn
                     System.out.println("\nidclient nom prenom age");
                     System.out.println(client.getIdClient() + " " + client.getNom() + " " + client.getPrenom() + " " + client.getAge());
 
-                    List<TupleReserveChambre> reserveChambres = gestionAubergeInn.getGestionReservation()
-                            .listerToutesReservationClient(idClient);
+                    List<TupleReserveChambre> reserveChambres = gestionAubergeInn.getGestionReservation().listerToutesReservationClient(idClient);
                     System.out.println("\nRéservation:");
                     System.out.println("\nid dateDebut dateFin prixTotal");
                     for (TupleReserveChambre reserve : reserveChambres)
@@ -268,8 +266,7 @@ public class AubergeInn
                     Date dateFin = readDate(tokenizer);
                     //appel methode traitement pour la transaction
                     gestionAubergeInn.getGestionReservation().reserver(idClient, idChambre, dateDebut, dateFin);
-                }
-                else if (command.equals("afficherCommodite"))
+                } else if (command.equals("afficherCommodite"))
                 {
                     List<TupleCommodite> commodites = gestionAubergeInn.getGestionCommodite().ListerTousCommodites();
                     System.out.println();
@@ -284,8 +281,7 @@ public class AubergeInn
                 else if (command.equals("--"))
                 {
                     // Ne rien faire, c'est un commentaire
-                }
-                else
+                } else
                 {
                     System.out.println(" : Transaction non reconnue. Essayer \"aide\"");
                 }
@@ -361,10 +357,8 @@ public class AubergeInn
      */
     static String readString(StringTokenizer tokenizer) throws Exception
     {
-        if (tokenizer.hasMoreElements())
-            return tokenizer.nextToken();
-        else
-            throw new Exception("Autre parametre attendu");
+        if (tokenizer.hasMoreElements()) return tokenizer.nextToken();
+        else throw new Exception("Autre parametre attendu");
     }
 
     /**
@@ -382,8 +376,7 @@ public class AubergeInn
             {
                 throw new Exception("Nombre attendu a la place de \"" + token + "\"");
             }
-        } else
-            throw new Exception("Autre parametre attendu");
+        } else throw new Exception("Autre parametre attendu");
     }
 
     static Date readDate(StringTokenizer tokenizer) throws Exception
@@ -398,8 +391,6 @@ public class AubergeInn
             {
                 throw new Exception("Date dans un format invalide - \"" + token + "\"");
             }
-        } else
-            throw new Exception("Autre parametre attendu");
+        } else throw new Exception("Autre parametre attendu");
     }
-
 }

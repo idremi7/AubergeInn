@@ -1,6 +1,9 @@
 package AubergeInn;
 
-import AubergeInn.tables.*;
+import AubergeInn.tables.TableChambres;
+import AubergeInn.tables.TableClients;
+import AubergeInn.tables.TableCommodites;
+import AubergeInn.tables.TableReserveChambre;
 import AubergeInn.transactions.GestionChambre;
 import AubergeInn.transactions.GestionClient;
 import AubergeInn.transactions.GestionCommodite;
@@ -30,8 +33,7 @@ public class GestionAubergeInn
      * @param user     user id pour établir une connexion avec le serveur SQL
      * @param password mot de passe pour le user id
      */
-    public GestionAubergeInn(String serveur, String bd, String user, String password)
-            throws IFT287Exception, SQLException
+    public GestionAubergeInn(String serveur, String bd, String user, String password) throws IFT287Exception, SQLException
     {
         // Allocation des objets pour le traitement des transactions
         cx = new Connexion(serveur, bd, user, password);

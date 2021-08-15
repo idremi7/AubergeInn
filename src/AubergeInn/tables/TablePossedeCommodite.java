@@ -1,12 +1,5 @@
 package AubergeInn.tables;
 
-import AubergeInn.Connexion;
-import AubergeInn.tuples.TupleClient;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class TablePossedeCommodite
 {
 //    private final PreparedStatement stmtExiste;

@@ -9,7 +9,6 @@ import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleClient;
 import AubergeInn.tuples.TupleReserveChambre;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +27,7 @@ public class GestionReservation
     public GestionReservation(TableChambres chambre, TableClients client, TableReserveChambre reservation) throws IFT287Exception
     {
         if (chambre.getConnexion() != client.getConnexion() || reservation.getConnexion() != client.getConnexion())
-            throw new IFT287Exception(
-                    "Les instances de chambre, de client et de reservation n'utilisent pas la même connexion au serveur");
+            throw new IFT287Exception("Les instances de chambre, de client et de reservation n'utilisent pas la même connexion au serveur");
         this.cx = chambre.getConnexion();
         this.chambre = chambre;
         this.client = client;
@@ -39,21 +37,18 @@ public class GestionReservation
     /**
      * Réservation d'une chambre par un client. La chambre doit être libre.
      */
-    public void reserver(int idClient, int idChambre, Date dateDebut, Date dateFin)
-            throws IFT287Exception, Exception
+    public void reserver(int idClient, int idChambre, Date dateDebut, Date dateFin) throws IFT287Exception, Exception
     {
         try
         {
             cx.demarreTransaction();
             // Vérifier que la chambre existe
             TupleChambre tupleChambre = chambre.getChambre(idChambre);
-            if (tupleChambre == null)
-                throw new IFT287Exception("Chambre inexistant: " + idChambre);
+            if (tupleChambre == null) throw new IFT287Exception("Chambre inexistant: " + idChambre);
 
             // Vérifier que le client existe
             TupleClient tupleClient = client.getClient(idClient);
-            if (tupleClient == null)
-                throw new IFT287Exception("Client inexistant: " + idClient);
+            if (tupleClient == null) throw new IFT287Exception("Client inexistant: " + idClient);
 
             // Vérifier si dateDebut < date d'aujourd'hui
             java.util.Date currentDate = new java.util.Date();
@@ -64,8 +59,8 @@ public class GestionReservation
                 throw new IFT287Exception("Date de fin inférieure ou égale à la date d'aujourd'hui");
 
             // Vérifier si la chambre existe dans les chambres libres
-            if(!chambre.listerChambresLibre().contains(tupleChambre))
-                throw new IFT287Exception("La chambre : " + idChambre +" n'est pas libre");
+            if (!chambre.listerChambresLibre().contains(tupleChambre))
+                throw new IFT287Exception("La chambre : " + idChambre + " n'est pas libre");
 
             List<TupleReserveChambre> listReservation = chambre.listerReservationsChambre(tupleChambre);
             for (TupleReserveChambre res : listReservation)

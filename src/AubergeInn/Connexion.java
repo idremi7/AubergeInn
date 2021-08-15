@@ -3,7 +3,6 @@ package AubergeInn;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,20 +40,18 @@ public class Connexion
      * @param user    Le nom d'utilisateur à utiliser pour se connecter à la base de données.
      * @param pass    Le mot de passe associé à l'utilisateur.
      */
-    public Connexion(String serveur, String bd, String user, String pass)
-            throws IFT287Exception
+    public Connexion(String serveur, String bd, String user, String pass) throws IFT287Exception
     {
 
         if (serveur.equals("local"))
         {
             emf = Persistence.createEntityManagerFactory(bd);
-        }
-        else if (serveur.equals("dinf"))
+        } else if (serveur.equals("dinf"))
         {
             Map<String, String> properties = new HashMap<String, String>();
             properties.put("javax.persistence.jdbc.user", user);
             properties.put("javax.persistence.jdbc.password", pass);
-            emf = Persistence.createEntityManagerFactory("objectdb://bd-info2.dinf.usherbrooke.ca:6136/"+user+"/" + bd, properties);
+            emf = Persistence.createEntityManagerFactory("objectdb://bd-info2.dinf.usherbrooke.ca:6136/" + user + "/" + bd, properties);
         } else
         {
             throw new IFT287Exception("Serveur inconnu");
@@ -62,9 +59,7 @@ public class Connexion
 
         em = emf.createEntityManager();
 
-        System.out.println("Ouverture de la connexion :\n"
-                + "Connecté sur la BD ObjectDB "
-                + bd + " avec l'utilisateur " + user);
+        System.out.println("Ouverture de la connexion :\n" + "Connecté sur la BD ObjectDB " + bd + " avec l'utilisateur " + user);
     }
 
     /**
@@ -87,7 +82,7 @@ public class Connexion
      */
     public void commit()
     {
-       em.getTransaction().commit();
+        em.getTransaction().commit();
     }
 
     /**
@@ -113,7 +108,6 @@ public class Connexion
      */
     public static String serveursSupportes()
     {
-        return "local : ObjectDb installé localement\n"
-                + "dinf  : ObjectDb installé sur les serveurs du département\n";
+        return "local : ObjectDb installé localement\n" + "dinf  : ObjectDb installé sur les serveurs du département\n";
     }
 }

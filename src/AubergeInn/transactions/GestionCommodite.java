@@ -4,13 +4,9 @@ import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
 import AubergeInn.tables.TableChambres;
 import AubergeInn.tables.TableCommodites;
-import AubergeInn.tables.TablePossedeCommodite;
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleCommodite;
-import AubergeInn.tuples.TuplePossedeCommodite;
 
-import javax.persistence.Tuple;
-import java.sql.SQLException;
 import java.util.List;
 
 public class GestionCommodite
@@ -36,8 +32,7 @@ public class GestionCommodite
      * Ajout d'une nouvelle commodite dans la base de données. S'il existe déjà, une
      * exception est levée.
      */
-    public void ajouterCommodite(int idCommodite, String description, float prix)
-            throws Exception
+    public void ajouterCommodite(int idCommodite, String description, float prix) throws Exception
     {
         try
         {
@@ -45,8 +40,7 @@ public class GestionCommodite
 
             TupleCommodite c = new TupleCommodite(idCommodite, description, prix);
             // Vérifie si la commodite existe déja
-            if (commodite.existe(idCommodite))
-                throw new IFT287Exception("Chambre existe déjà: " + idCommodite);
+            if (commodite.existe(idCommodite)) throw new IFT287Exception("Chambre existe déjà: " + idCommodite);
 
             // Ajout d'une commodite dans la table des commodite
             commodite.ajouter(c);
@@ -69,8 +63,7 @@ public class GestionCommodite
         {
             // Validation
             TupleCommodite tupleCommodite = commodite.getCommodite(idCommodite);
-            if (tupleCommodite == null)
-                throw new IFT287Exception("Client inexistant: " + idCommodite);
+            if (tupleCommodite == null) throw new IFT287Exception("Client inexistant: " + idCommodite);
 
             // Suppression d'une commodite.
             if (!commodite.supprimer(tupleCommodite))
@@ -89,8 +82,7 @@ public class GestionCommodite
      * Ajout d'une nouvelle commodite dans la base de données. S'il existe déjà, une
      * exception est levée.
      */
-    public void InclureCommodite(int idChambre, int idCommodite)
-            throws Exception
+    public void InclureCommodite(int idChambre, int idCommodite) throws Exception
     {
         try
         {
@@ -99,12 +91,14 @@ public class GestionCommodite
             TupleCommodite c = commodite.getCommodite(idCommodite);
             TupleChambre ch = chambre.getChambre(idChambre);
 
-            if(c == null){
-                throw new IFT287Exception("la commodite : " + idCommodite +  " existe pas!");
+            if (c == null)
+            {
+                throw new IFT287Exception("la commodite : " + idCommodite + " existe pas!");
             }
 
-            if(ch == null){
-                throw new IFT287Exception("la chambre : " + idChambre +  " existe pas!");
+            if (ch == null)
+            {
+                throw new IFT287Exception("la chambre : " + idChambre + " existe pas!");
             }
 
             // Vérifie si la commodite existe déja
@@ -112,9 +106,11 @@ public class GestionCommodite
                 throw new IFT287Exception("la commodite : " + idCommodite + " avec la chambre " + idChambre + " existe déjà!");
 
             // Ajout d'une commodite dans la liste de commodite d'une chambre
-            if(ch.ajouteCommodite(c)){
-                System.out.println("\nVous venez d'ajouter la commodite "+ idCommodite+ " a la chambre "+ idChambre);
-            }else{
+            if (ch.ajouteCommodite(c))
+            {
+                System.out.println("\nVous venez d'ajouter la commodite " + idCommodite + " a la chambre " + idChambre);
+            } else
+            {
                 throw new IFT287Exception("la commodite : " + idCommodite + " n'a pas été ajoutee");
             }
 

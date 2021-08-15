@@ -7,7 +7,6 @@ import AubergeInn.tables.TableReserveChambre;
 import AubergeInn.tuples.TupleClient;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class GestionClient
 {
@@ -40,8 +39,7 @@ public class GestionClient
             TupleClient c = new TupleClient(idClient, nom, prenom, age);
 
             // Vérifie si le livre existe déja
-            if (client.existe(idClient))
-                throw new IFT287Exception("Livre existe déjà: " + idClient);
+            if (client.existe(idClient)) throw new IFT287Exception("Livre existe déjà: " + idClient);
 
             // Ajout du livre dans la table des livres
             client.ajouter(c);
@@ -64,15 +62,13 @@ public class GestionClient
 
             // Validation
             TupleClient tupleClient = client.getClient(idClient);
-            if (tupleClient == null)
-                throw new IFT287Exception("Client inexistant: " + idClient);
+            if (tupleClient == null) throw new IFT287Exception("Client inexistant: " + idClient);
 
             if (reservation.getReservationClient(tupleClient) != null)
                 throw new IFT287Exception("Client #" + idClient + " a une ou plusieurs réservations ");
 
             // Suppression du client.
-            if (!client.supprimer(tupleClient))
-                throw new IFT287Exception("Client " + idClient + " inexistant");
+            if (!client.supprimer(tupleClient)) throw new IFT287Exception("Client " + idClient + " inexistant");
 
             // Commit
             cx.commit();
@@ -92,8 +88,7 @@ public class GestionClient
         {
             cx.demarreTransaction();
             TupleClient unClient = client.getClient(idClient);
-            if (unClient == null)
-                throw new IFT287Exception("Client inexistant: " + idClient);
+            if (unClient == null) throw new IFT287Exception("Client inexistant: " + idClient);
             cx.commit();
             return unClient;
         } catch (Exception e)

@@ -16,7 +16,7 @@ public class TableClients
     {
         this.cx = cx;
         this.stmtExiste = cx.getConnection().createQuery("select c from TupleClient c where c.idClient = :idClient", TupleClient.class);
-        this.stmtListeTousClients = cx.getConnection().createQuery("select c from TupleClient c",TupleClient.class);
+        this.stmtListeTousClients = cx.getConnection().createQuery("select c from TupleClient c", TupleClient.class);
     }
 
     /**
@@ -43,9 +43,11 @@ public class TableClients
     {
         stmtExiste.setParameter("idClient", idClient);
         List<TupleClient> clients = stmtExiste.getResultList();
-        if(!clients.isEmpty()){
+        if (!clients.isEmpty())
+        {
             return clients.get(0);
-        }else{
+        } else
+        {
             return null;
         }
     }

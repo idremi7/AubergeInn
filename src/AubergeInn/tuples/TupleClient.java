@@ -1,8 +1,8 @@
 package AubergeInn.tuples;
 
-import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class TupleClient
@@ -72,11 +72,6 @@ public class TupleClient
     @Override
     public String toString()
     {
-        return "TupleClient{" +
-                "idClient=" + idClient +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", age=" + age +
-                '}';
+        return "TupleClient{" + "idClient=" + idClient + ", nom='" + nom + '\'' + ", prenom='" + prenom + '\'' + ", age=" + age + '}';
     }
 }

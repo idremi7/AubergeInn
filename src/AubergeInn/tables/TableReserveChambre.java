@@ -6,11 +6,7 @@ import AubergeInn.tuples.TupleClient;
 import AubergeInn.tuples.TupleReserveChambre;
 
 import javax.persistence.TypedQuery;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TableReserveChambre
@@ -27,16 +23,12 @@ public class TableReserveChambre
     public TableReserveChambre(Connexion cx) throws SQLException
     {
         this.cx = cx;
-        this.stmtExiste = cx.getConnection()
-                .createQuery("select r from TupleReserveChambre r where r.idReservation = :idReservation", TupleReserveChambre.class);
+        this.stmtExiste = cx.getConnection().createQuery("select r from TupleReserveChambre r where r.idReservation = :idReservation", TupleReserveChambre.class);
 
-        this.stmtListeReservationClient = cx.getConnection()
-                .createQuery("select r from TupleReserveChambre r where r.client = :client", TupleReserveChambre.class);
+        this.stmtListeReservationClient = cx.getConnection().createQuery("select r from TupleReserveChambre r where r.client = :client", TupleReserveChambre.class);
 
 
-
-        this.stmtListeTousReservation = cx.getConnection()
-                .createQuery("select r from TupleReserveChambre r", TupleReserveChambre.class);
+        this.stmtListeTousReservation = cx.getConnection().createQuery("select r from TupleReserveChambre r", TupleReserveChambre.class);
 
     }
 
@@ -65,7 +57,7 @@ public class TableReserveChambre
         stmtExiste.setParameter("client", client);
         stmtExiste.setParameter("chambre", chambre);
         List<TupleReserveChambre> reservations = stmtExiste.getResultList();
-        if(!reservations.isEmpty())
+        if (!reservations.isEmpty())
         {
             return reservations.get(0);
         }
@@ -79,7 +71,7 @@ public class TableReserveChambre
     {
         stmtListeReservationClient.setParameter("client", client);
         List<TupleReserveChambre> reservations = stmtListeReservationClient.getResultList();
-        if(!reservations.isEmpty())
+        if (!reservations.isEmpty())
         {
             return reservations.get(0);
         }
@@ -116,7 +108,7 @@ public class TableReserveChambre
      */
     public boolean annulerRes(TupleReserveChambre r) throws SQLException
     {
-        if(r != null)
+        if (r != null)
         {
             cx.getConnection().remove(r);
             return true;

@@ -1,7 +1,8 @@
 package AubergeInn.tuples;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class TupleChambre
@@ -77,10 +78,13 @@ public class TupleChambre
         return commodites;
     }
 
-    public boolean isCommoditeExiste(TupleCommodite c){
-        if (commodites.contains(c)){
+    public boolean isCommoditeExiste(TupleCommodite c)
+    {
+        if (commodites.contains(c))
+        {
             return true;
-        }else{
+        } else
+        {
             return false;
         }
     }
@@ -105,7 +109,8 @@ public class TupleChambre
         commodites.remove(c);
     }
 
-    public float calculerPrixTotal(){
+    public float calculerPrixTotal()
+    {
 
         float total = 0;
         for (TupleCommodite c : commodites)

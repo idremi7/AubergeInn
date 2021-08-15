@@ -16,11 +16,9 @@ public class TableCommodites
     public TableCommodites(Connexion cx)
     {
         this.cx = cx;
-        this.stmtExiste = cx.getConnection()
-                .createQuery("select c from TupleCommodite c where c.idCommodite = :idcommodite", TupleCommodite.class);
+        this.stmtExiste = cx.getConnection().createQuery("select c from TupleCommodite c where c.idCommodite = :idcommodite", TupleCommodite.class);
 
-        this.stmtListerCommodites = cx.getConnection()
-                .createQuery("select c from TupleCommodite c", TupleCommodite.class);
+        this.stmtListerCommodites = cx.getConnection().createQuery("select c from TupleCommodite c", TupleCommodite.class);
     }
 
     /**
@@ -85,7 +83,7 @@ public class TableCommodites
      */
     public List<TupleCommodite> ListerCommodites()
     {
-       return stmtListerCommodites.getResultList();
+        return stmtListerCommodites.getResultList();
     }
 
 }

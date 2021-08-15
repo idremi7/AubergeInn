@@ -1,18 +1,13 @@
 package AubergeInn.transactions;
 
-
 import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
 import AubergeInn.tables.TableChambres;
 import AubergeInn.tables.TableCommodites;
 import AubergeInn.tables.TableReserveChambre;
-import AubergeInn.tuples.*;
+import AubergeInn.tuples.TupleChambre;
+import AubergeInn.tuples.TupleCommodite;
 
-import java.net.StandardSocketOptions;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GestionChambre
@@ -38,8 +33,7 @@ public class GestionChambre
      * Ajout d'une nouvelle chambre dans la base de données. S'il existe déjà, une
      * exception est levée.
      */
-    public void ajouterChambre(int idChambre, String nom, String type, float prixBase)
-            throws IFT287Exception, Exception
+    public void ajouterChambre(int idChambre, String nom, String type, float prixBase) throws IFT287Exception, Exception
     {
         try
         {
@@ -48,8 +42,7 @@ public class GestionChambre
             TupleChambre chambre = new TupleChambre(idChambre, nom, type, prixBase);
 
             // Vérifie si la chambre existe déja
-            if (chambres.existe(idChambre))
-                throw new IFT287Exception("Chambre existe déjà: " + idChambre);
+            if (chambres.existe(idChambre)) throw new IFT287Exception("Chambre existe déjà: " + idChambre);
 
             // Ajout d'une chambre dans la table des chambres
             chambres.ajouter(chambre);
@@ -74,16 +67,13 @@ public class GestionChambre
             cx.demarreTransaction();
             // Validation
             TupleChambre chambre = chambres.getChambre(idChambre);
-            if (chambre == null)
-                throw new IFT287Exception("Chambre inexistant: " + idChambre);
+            if (chambre == null) throw new IFT287Exception("Chambre inexistant: " + idChambre);
 
             // Suppression du chambre.
-            if (!chambres.supprimer(chambre))
-                throw new IFT287Exception("Chambre " + idChambre + " inexistant");
+            if (!chambres.supprimer(chambre)) throw new IFT287Exception("Chambre " + idChambre + " inexistant");
 
             cx.commit();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             cx.rollback();
             throw e;
@@ -100,8 +90,7 @@ public class GestionChambre
         {
             cx.demarreTransaction();
             TupleChambre uneChambre = chambres.getChambre(idChambre);
-            if (uneChambre == null)
-                throw new IFT287Exception("Chambre inexistant: " + idChambre);
+            if (uneChambre == null) throw new IFT287Exception("Chambre inexistant: " + idChambre);
             cx.commit();
             return uneChambre;
         } catch (Exception e)
@@ -128,7 +117,6 @@ public class GestionChambre
     }
 
 
-
     /**
      * Affiche les chambres libres
      */
@@ -138,7 +126,7 @@ public class GestionChambre
         List<TupleChambre> listeChambre = chambres.listerChambresLibre();
         for (TupleChambre ch : listeChambre)
         {
-                ch.afficherInfosChambre();
+            ch.afficherInfosChambre();
         }
         cx.commit();
     }

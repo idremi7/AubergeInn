@@ -1,13 +1,10 @@
 package AubergeInn.tables;
 
-
 import AubergeInn.Connexion;
 import AubergeInn.tuples.TupleChambre;
 import AubergeInn.tuples.TupleCommodite;
 import AubergeInn.tuples.TupleReserveChambre;
-
 import javax.persistence.TypedQuery;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,14 +24,10 @@ public class TableChambres
     {
         this.cx = cx;
 
-        stmtExiste = cx.getConnection()
-                .createQuery("select ch from TupleChambre ch where ch.idChambre = :idchambre", TupleChambre.class);
-        stmtListeTousChambres = cx.getConnection()
-                .createQuery("select ch from TupleChambre ch", TupleChambre.class);
-        stmtListeTousReservation = cx.getConnection()
-                .createQuery("select r from TupleReserveChambre r", TupleReserveChambre.class);
-        this.stmtListeReservationChambre = cx.getConnection()
-                .createQuery("select r from TupleReserveChambre r where r.chambre = :chambre", TupleReserveChambre.class);
+        this.stmtExiste = cx.getConnection().createQuery("select ch from TupleChambre ch where ch.idChambre = :idchambre", TupleChambre.class);
+        this.stmtListeTousChambres = cx.getConnection().createQuery("select ch from TupleChambre ch", TupleChambre.class);
+        this.stmtListeTousReservation = cx.getConnection().createQuery("select r from TupleReserveChambre r", TupleReserveChambre.class);
+        this.stmtListeReservationChambre = cx.getConnection().createQuery("select r from TupleReserveChambre r where r.chambre = :chambre", TupleReserveChambre.class);
     }
 
     /**
@@ -119,7 +112,7 @@ public class TableChambres
     {
         stmtListeReservationChambre.setParameter("chambre", chambre);
         List<TupleReserveChambre> reservations = stmtListeReservationChambre.getResultList();
-        if(!reservations.isEmpty())
+        if (!reservations.isEmpty())
         {
             return reservations.get(0);
         }
